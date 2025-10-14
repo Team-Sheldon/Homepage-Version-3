@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Whiteboard</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    :root {
+      --primary: #00205b;
+      --primary-light: #003d7a;
+      --primary-dark: #001742;
+      --accent: #4d94ff;
+      --accent-light: #7db3ff;
+      --accent-dark: #2e7ddb;
+      --warning: #ffcc00;
+      --success: #28a745;
+      --danger: #dc3545;
+      --bg: #f8f9fa;
+      --bg-light: #ffffff;
+      --bg-dark: #e9ecef;
+      --text: #333333;
+      --text-light: #6c757d;
+      --text-dark: #212529;
+      --border: #dee2e6;
+      --shadow: rgba(0, 32, 91, 0.1);
+      --shadow-strong: rgba(0, 32, 91, 0.2);
+      --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--bg) 0%, var(--bg-light) 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-top: 60px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--bg-light);
+      cursor: crosshair;
+      z-index: 0;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+
+    .toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.98) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 20px;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 8px 40px var(--shadow), 0 4px 20px var(--shadow-strong);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+      opacity: 1;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .toolbar:hover {
+      box-shadow: 0 12px 50px var(--shadow-strong), 0 6px 25px var(--shadow);
+      transform: translateY(-1px);
+    }
+
+    .toolbar-content {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: nowrap;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .drag-handle {
+      cursor: move;
+      padding: 4px 8px;
+      background: var(--accent);
+      border-radius: 6px;
+      user-select: none;
+      font-weight: bold;
+      font-size: 14px;
+      color: var(--primary);
+    }
+
+    .toolbar button {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      white-space: nowrap;
+      transition: var(--transition);
+      box-shadow: 0 3px 12px var(--shadow-strong);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .toolbar button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .toolbar button:hover::before {
+      left: 100%;
+    }
+
+    .toolbar button:hover {
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--shadow-strong);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .toolbar button:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px var(--shadow-strong);
+    }
+
+    .toolbar input[type="color"],
+    .toolbar input[type="range"] {
+      cursor: pointer;
+    }
+
+    .toolbar input[type="color"] {
+      width: 35px;
+      height: 35px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px var(--shadow);
+      background: white;
+    }
+
+    .toolbar input[type="color"]:hover {
+      border-color: var(--accent);
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px var(--shadow-strong);
+    }
+
+    .toolbar input[type="range"] {
+      width: 80px;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: 4px;
+      outline: none;
+      transition: var(--transition);
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    .toolbar input[type="range"]:hover {
+      transform: scaleY(1.3);
+      box-shadow: 0 4px 12px var(--shadow-strong);
+    }
+
+    .toolbar input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, white 0%, var(--bg) 100%);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 3px 12px var(--shadow-strong);
+      transition: var(--transition);
+      border: 2px solid var(--accent);
+    }
+
+    .toolbar input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.3);
+      box-shadow: 0 5px 20px var(--shadow-strong);
+      background: linear-gradient(135deg, var(--accent) 0%, white 100%);
+    }
+
+    .toolbar label {
+      font-size: 16px;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: var(--transition);
+      flex-shrink: 0;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .toolbar label:hover {
+      background: rgba(77, 148, 255, 0.1);
+      transform: scale(1.1);
+      color: var(--accent);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(380px, 90vw);
+      max-height: min(600px, 85vh);
+      background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg) 100%);
+      border: 1px solid var(--border);
+      padding: 30px;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px var(--shadow-strong), 0 8px 30px var(--shadow);
+      z-index: 25;
+      border-radius: 20px;
+      display: block;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .sidebar.show {
+      display: block;
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 32, 91, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%);
+      z-index: 20;
+      display: block;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .sidebar-overlay.show {
+      display: block;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--border);
+      position: relative;
+    }
+
+    .sidebar-header::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+      border-radius: 2px;
+    }
+
+    .sidebar-header h2 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 22px;
+      font-weight: 700;
+      text-shadow: 0 1px 2px var(--shadow);
+    }
+
+    .close-button {
+      background: linear-gradient(135deg, var(--danger) 0%, #c82333 100%);
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: white;
+      padding: 0;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px var(--shadow);
+      font-weight: bold;
+    }
+
+    .close-button:hover {
+      background: linear-gradient(135deg, #c82333 0%, var(--danger) 100%);
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px var(--shadow-strong);
+    }
+
+    .sidebar h3 {
+      margin: 20px 0 10px;
+      color: var(--primary);
+      font-size: 18px;
+      font-weight: 600;
+      text-shadow: 0 1px 2px var(--shadow);
+    }
+
+    .success-notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--success) 0%, #20c997 100%);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+      z-index: 1000;
+      font-weight: 600;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateX(120%) scale(0.8);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .success-notification.show {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+
+    .warning-notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--danger) 0%, #e74c3c 100%);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+      z-index: 1000;
+      font-weight: 600;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateX(120%) scale(0.8);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .warning-notification.show {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      box-sizing: border-box;
+      font-size: 16px;
+      transition: var(--transition);
+      background: white;
+      color: var(--text);
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    input[type="text"]:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(77, 148, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .submit-button, .lock-button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 15px 20px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 12px;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px var(--shadow-strong);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .submit-button:hover, .lock-button:hover {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--shadow-strong);
+    }
+
+    .team-box {
+      position: absolute;
+      background: var(--bg-light);
+      border-radius: 12px;
+      cursor: move;
+      font-weight: 700;
+      user-select: none;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      /* Size will be set dynamically by JavaScript */
+    }
+
+    .team-box:hover {
+      transform: scale(1.05) translateY(-2px);
+      box-shadow: 0 8px 25px var(--shadow-strong);
+    }
+
+    .red { 
+      background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%); 
+      border: 3px solid #ff4d4d; 
+      color: #cc0000;
+    }
+    
+    .blue { 
+      background: linear-gradient(135deg, #e6f3ff 0%, #cce7ff 100%); 
+      border: 3px solid #3399ff; 
+      color: #0066cc;
+    }
+
+    .red:hover {
+      border-color: #ff1a1a;
+      background: linear-gradient(135deg, #ffcccc 0%, #ffb3b3 100%);
+    }
+
+    .blue:hover {
+      border-color: #1a8cff;
+      background: linear-gradient(135deg, #cce7ff 0%, #b3d9ff 100%);
+    }
+
+    .tabs {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  background: white;
+  border-bottom: 2px solid #ccc;
+  display: flex;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.tabs button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.active-tab {
+  background: var(--accent);
+  color: black;
+}    canvas {
+      position: absolute;
+      top: 60px;
+      left: 0px;
+      z-index: 0;
+      width: 100%;
+      height: calc(100% - 60px);
+    }
+
+    /* Keyframe Animations */
+    @keyframes slideInDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    /* Add animations to elements */
+    .toolbar {
+      animation: slideInDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .sidebar {
+      animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Enhanced Back Button Styling */
+    .back-button {
+      position: relative;
+    }
+
+    .back-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .back-button:hover::before {
+      left: 100%;
+    }
+
+    .back-button:hover {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%) !important;
+      transform: translateY(-3px) scale(1.05) !important;
+      box-shadow: 0 8px 30px var(--shadow-strong) !important;
+      border-color: rgba(255, 255, 255, 0.4) !important;
+    }
+
+    .back-button:hover span:first-child {
+      transform: translateX(-3px) !important;
+    }
+
+    .back-button:active {
+      transform: translateY(-1px) scale(1.02) !important;
+      box-shadow: 0 4px 20px var(--shadow-strong) !important;
+    }
+
+/* Enhanced Mobile responsive styles */
+@media (max-width: 768px) {
+  .toolbar {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    top: auto;
+    max-width: none;
+    padding: 15px 12px;
+    border-radius: 25px;
+    gap: 10px;
+    box-shadow: 0 8px 30px var(--shadow-strong);
+  }
+  
+  .toolbar-content {
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .toolbar button {
+    padding: 12px 10px;
+    font-size: 11px;
+    border-radius: 10px;
+  }
+  
+  .drag-handle {
+    display: none;
+  }
+  
+  .toolbar input[type="color"] {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .toolbar input[type="range"] {
+    width: 65px;
+  }
+  
+  .toolbar label {
+    font-size: 15px;
+  }
+  
+  .sidebar {
+    width: min(350px, 95vw);
+    max-height: 85vh;
+    padding: 25px 20px;
+  }
+  
+  .sidebar h3 {
+    font-size: 16px;
+    margin: 15px 0 8px;
+  }
+  
+  .sidebar-header h2 {
+    font-size: 20px;
+  }
+  
+  input[type="text"], input[type="number"] {
+    padding: 10px 14px;
+    font-size: 16px;
+  }
+  
+  .submit-button {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  .back-button {
+    width: 100px !important;
+    height: 40px !important;
+    font-size: 12px !important;
+    top: 10px !important;
+    right: 10px !important;
+  }
+
+  .back-button span:first-child {
+    font-size: 14px !important;
+    margin-right: 6px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .toolbar {
+    padding: 12px 8px;
+    gap: 6px;
+    border-radius: 20px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+  }
+  
+  .toolbar-content {
+    gap: 6px;
+  }
+  
+  .toolbar button {
+    padding: 10px 8px;
+    font-size: 10px;
+    border-radius: 8px;
+  }
+  
+  .toolbar input[type="color"] {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .toolbar input[type="range"] {
+    width: 55px;
+  }
+  
+  .toolbar label {
+    font-size: 13px;
+  }
+  
+  .sidebar {
+    width: min(320px, 98vw);
+    padding: 20px 15px;
+  }
+  
+  .sidebar h3 {
+    font-size: 16px;
+  }
+  
+  .sidebar-header h2 {
+    font-size: 18px;
+  }
+
+  .button {
+    width: 55px !important;
+    height: 45px !important;
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+  }
+
+  .success-notification,
+  .warning-notification {
+    right: 10px;
+    top: 70px;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- Back Arrow Button -->
+  <button class="back-button" onclick="goBackSafely()" style="
+   position: fixed;
+   top: 15px;
+   right: 15px;
+   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+   color: white;
+   border: none;
+   border-radius: 50px;
+   padding: 0;
+   font-size: 14px;
+   font-weight: 600;
+   cursor: pointer;
+   z-index: 30;
+   box-shadow: 0 6px 20px var(--shadow-strong);
+   transition: var(--transition);
+   text-decoration: none;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 120px;
+   height: 45px;
+   backdrop-filter: blur(20px);
+   -webkit-backdrop-filter: blur(20px);
+   border: 2px solid rgba(255, 255, 255, 0.2);
+   overflow: hidden;
+   ">
+   <span style='margin-right: 8px; font-size: 16px; transition: var(--transition);'>←</span>
+   <span style='transition: var(--transition);'>Back</span>
+   </button>
+
+  <div class="toolbar" id="toolbar">
+    <div class="toolbar-content" id="toolbarContent">
+      <button onclick="setMode('draw')">✏️ Draw</button>
+      <button onclick="setMode('erase')">🧽 Erase</button>
+      <button onclick="clearCanvas()">🗑️ Clear</button>
+      <button onclick="undoLast()">↶ Undo</button>
+      <label for="colourPicker">🎨</label>
+      <input type="color" id="colourPicker" value="#000000" onchange="changeColour(this.value)" />
+      <label for="thicknessRange">🖌️</label>
+      <input type="range" id="thicknessRange" min="1" max="50" value="5" onchange="changeThickness(this.value)" />
+      <button onclick="saveCanvas()">💾 Save</button>
+      <button id="lockToggle" onclick="toggleLock()">🔓 Unlock</button>
+    </div>
+  </div>
+  
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Team Setup</h2>
+      <button class="close-button" onclick="closeTeamSetupSafely()">×</button>
+    </div>
+    <h3>Red Alliance</h3>
+    <input type="number" id="redInput" placeholder="Enter team number" onkeydown="addTeam(event, 'red')" oninput="validateNumberInput(this)">
+    <ul id="redList"></ul>
+    <h3>Blue Alliance</h3>
+    <input type="number" id="blueInput" placeholder="Enter team number" onkeydown="addTeam(event, 'blue')" oninput="validateNumberInput(this)">
+    <ul id="blueList"></ul>
+    <button class="submit-button" onclick="submitAlliances()">Submit</button>
+  </div>
+
+
+
+  <canvas id="whiteboard"></canvas>
+
+  <!-- Success Notification -->
+  <div id="successNotification" class="success-notification">
+    ✅ Whiteboard saved successfully!
+  </div>
+
+  <!-- Warning Notification -->
+  <div id="warningNotification" class="warning-notification">
+    ⚠️ You can only have 3 teams per alliance!
+  </div>
+
+  <!-- Error Notification -->
+  <div id="errorNotification" class="warning-notification">
+    ❌ Please enter both title and scout name!
+  </div>
+
+  <script>
+    const canvas = document.getElementById('whiteboard');
+    const ctx = canvas.getContext('2d');
+    const toolbar = document.getElementById('toolbar');
+    const sidebar = document.getElementById('sidebar');
+    const lockToggle = document.getElementById('lockToggle');
+    const toolbarContent = document.getElementById('toolbarContent');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - 60;
+
+    let drawing = false;
+    let mode = 'draw';
+    let drawColour = '#000000';
+    let drawThickness = 5;
+    let backgroundImage = new Image();
+    let locked = false;
+    let undoStack = [];
+    let maxUndoSteps = 20;
+
+    backgroundImage.src = './Files/Images/2025 FRC Field.png'; // Change to your field image
+    backgroundImage.onload = () => {
+      // Calculate scale to maintain aspect ratio
+      const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+      const scaledWidth = backgroundImage.width * scale;
+      const scaledHeight = backgroundImage.height * scale;
+      
+      // Center the image on the canvas
+      const x = (canvas.width - scaledWidth) / 2;
+      const y = (canvas.height - scaledHeight) / 2;
+      
+      // Draw image with proper scaling
+      ctx.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight);
+      
+      // Save initial state for undo
+      saveCanvasState();
+    };
+
+    function saveCanvasState() {
+      undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+      if (undoStack.length > maxUndoSteps) {
+        undoStack.shift(); // Remove oldest state
+      }
+    }
+
+    function undoLast() {
+      if (undoStack.length > 1) {
+        undoStack.pop(); // Remove current state
+        const previousState = undoStack[undoStack.length - 1];
+        ctx.putImageData(previousState, 0, 0);
+      }
+    }
+
+    function setMode(newMode) { 
+      mode = newMode;
+      // Reset composite operation when switching modes
+      if (mode === 'erase') {
+        ctx.globalCompositeOperation = 'destination-out';
+      } else {
+        ctx.globalCompositeOperation = 'source-over';
+      }
+    }
+    function changeColour(newColour) { drawColour = newColour; }
+    function changeThickness(newThickness) { drawThickness = newThickness; }
+    function clearCanvas() {
+      // Reset composite operation BEFORE clearing and redrawing
+      ctx.globalCompositeOperation = 'source-over';
+      mode = 'draw'; // Reset mode to draw
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Immediately redraw the background image
+      if (backgroundImage.complete) {
+        // Calculate scale to maintain aspect ratio
+        const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+        const scaledWidth = backgroundImage.width * scale;
+        const scaledHeight = backgroundImage.height * scale;
+        
+        // Center the image on the canvas
+        const x = (canvas.width - scaledWidth) / 2;
+        const y = (canvas.height - scaledHeight) / 2;
+        
+        // Draw image with proper scaling
+        ctx.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight);
+      }
+      
+      // Clear undo stack and save new state
+      undoStack = [];
+      saveCanvasState();
+    }
+    function saveCanvas() {
+      // Always save locally when save button is clicked
+      saveLocallyDirect();
+    }
+
+    function validateNumberInput(input) {
+        // Remove any non-numeric characters
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+
+    function addTeam(event, alliance) {
+      if (event.key === 'Enter') {
+        const input = document.getElementById(alliance + 'Input');
+        const list = document.getElementById(alliance + 'List');
+        const teamNumber = input.value.trim();
+        if (teamNumber && list.children.length < 3) {
+          const listItem = document.createElement('li');
+          listItem.textContent = teamNumber;
+          listItem.onclick = () => listItem.remove();
+          list.appendChild(listItem);
+          input.value = '';
+        } else if (list.children.length >= 3) {
+          input.value = '';
+          showWarningNotification('⚠️ You can only have 3 teams per alliance!');
+        }
+        checkAllianceReadiness();
+      }
+    }
+
+    function checkAllianceReadiness() {
+      const redCount = document.getElementById('redList').children.length;
+      const blueCount = document.getElementById('blueList').children.length;
+      if (redCount >= 3 && blueCount >= 3) toolbar.classList.add('enabled');
+      else toolbar.classList.remove('enabled');
+    }
+
+    function submitAlliances() {
+      const redTeams = Array.from(document.getElementById('redList').children).map(li => li.textContent);
+      const blueTeams = Array.from(document.getElementById('blueList').children).map(li => li.textContent);
+      closePopup();
+      toolbar.classList.add('enabled'); // allow drawing tools after submission
+      
+      // Calculate image position and scale
+      const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+      const scaledWidth = backgroundImage.width * scale;
+      const scaledHeight = backgroundImage.height * scale;
+      const imageX = (canvas.width - scaledWidth) / 2;
+      const imageY = (canvas.height - scaledHeight) / 2 + 60; // Add toolbar offset
+      
+      // Calculate box size based on image scale
+      const boxWidth = Math.max(50, scaledWidth * 0.055); // Minimum 50px, smaller width
+      const boxHeight = Math.max(25, scaledHeight * 0.025); // Minimum 25px, thinner boxes
+      const fontSize = Math.max(12, scale * 14); // Minimum 12px, scales with image
+      const padding = Math.max(4, scale * 6); // Minimum 4px, less padding for thinner boxes
+      
+      // Position teams relative to the scaled image - fine-tuned for exact positioning
+      const leftPosition = imageX + (scaledWidth * 0.365); // More precise for ~580px
+      const rightPosition = imageX + (scaledWidth * 0.57); // Moved left significantly from 0.635 to 0.57
+      const verticalSpacing = scaledHeight * 0.24; // Adjusted for better 165px spacing
+      const startTop = imageY + (scaledHeight * 0.235); // Moved down just a tad from 0.20 to 0.23
+
+      // Place red alliance teams on the left
+      redTeams.forEach((team, i) => {
+        const div = document.createElement('div');
+        div.className = 'team-box red';
+        div.textContent = team;
+        div.style.left = `${leftPosition}px`;
+        div.style.top = `${startTop + i * verticalSpacing}px`;
+        div.style.width = `${boxWidth}px`;
+        div.style.height = `${boxHeight}px`;
+        div.style.fontSize = `${fontSize}px`;
+        div.style.padding = `${padding}px`;
+        div.style.lineHeight = `${boxHeight - (padding * 2)}px`;
+        document.body.appendChild(div);
+        makeDraggable(div);
+      });
+      
+      // Place blue alliance teams on the right
+      blueTeams.forEach((team, i) => {
+        const div = document.createElement('div');
+        div.className = 'team-box blue';
+        div.textContent = team;
+        div.style.left = `${rightPosition}px`;
+        div.style.top = `${startTop + i * verticalSpacing}px`;
+        div.style.width = `${boxWidth}px`;
+        div.style.height = `${boxHeight}px`;
+        div.style.fontSize = `${fontSize}px`;
+        div.style.padding = `${padding}px`;
+        div.style.lineHeight = `${boxHeight - (padding * 2)}px`;
+        document.body.appendChild(div);
+        makeDraggable(div);
+      });
+    }
+
+    function openPopup() {
+      document.getElementById('sidebar').classList.add('show');
+      document.getElementById('sidebarOverlay').classList.add('show');
+    }
+
+    function closePopup() {
+      document.getElementById('sidebar').style.display = 'none';
+      document.getElementById('sidebarOverlay').style.display = 'none';
+    }
+
+    function closeTeamSetupSafely() {
+      // Temporarily disable the beforeunload warning
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+      // Navigate away
+      window.location.href = 'https://teamsheldon.tech/';
+    }
+
+    function goBackSafely() {
+      // Temporarily disable the beforeunload warning
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+      // Navigate away
+      window.location.href = 'https://teamsheldon.tech/';
+    }
+
+    // Store the beforeunload handler so we can remove it
+    function beforeUnloadHandler(e) {
+      e.preventDefault();
+      e.returnValue = 'Are you sure you want to leave? Your changes may not be saved.';
+    }
+
+
+    function toggleLock() {
+      locked = !locked;
+      lockToggle.textContent = locked ? '🔒 Lock' : '🔓 Unlock';
+    }
+
+    function makeDraggable(el) {
+      let offsetX = 0, offsetY = 0, isDragging = false;
+
+      el.addEventListener('mousedown', e => {
+        if (locked) return;
+        isDragging = true;
+        offsetX = e.clientX - el.offsetLeft;
+        offsetY = e.clientY - el.offsetTop;
+        el.style.zIndex = 1000;
+      });
+
+      document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        el.style.left = `${e.clientX - offsetX}px`;
+        el.style.top = `${e.clientY - offsetY}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        el.style.zIndex = 1;
+      });
+    }
+
+    // Draw on Canvas
+    canvas.addEventListener('mousedown', () => {
+        drawing = true;
+    });
+    canvas.addEventListener('mouseup', () => {
+      if (drawing) {
+        drawing = false;
+        ctx.beginPath();
+        // Save canvas state after each drawing action
+        saveCanvasState();
+      }
+    });
+    canvas.addEventListener('mousemove', draw);
+
+    function draw(e) {
+      if (!drawing || !toolbar.classList.contains('enabled')) return;
+      ctx.lineWidth = drawThickness;
+      ctx.lineCap = 'round';
+      
+      if (mode === 'erase') {
+        ctx.globalCompositeOperation = 'destination-out';
+        // Don't set strokeStyle for erasing - it should remove pixels
+      } else {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = drawColour;
+      }
+      
+      ctx.lineTo(e.clientX, e.clientY - 60);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX, e.clientY - 60);
+    }
+
+    // Handle Window Resize
+    window.addEventListener('resize', () => {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 60;
+      ctx.putImageData(imageData, 0, 0);
+      if (backgroundImage.complete) {
+        // Calculate scale to maintain aspect ratio
+        const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+        const scaledWidth = backgroundImage.width * scale;
+        const scaledHeight = backgroundImage.height * scale;
+        
+        // Center the image on the canvas
+        const x = (canvas.width - scaledWidth) / 2;
+        const y = (canvas.height - scaledHeight) / 2;
+        
+        // Draw image with proper scaling
+        ctx.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight);
+        
+        // Reposition team boxes relative to the new image position
+        repositionTeamBoxes();
+      }
+    });
+
+    function repositionTeamBoxes() {
+      const teamBoxes = document.querySelectorAll('.team-box');
+      if (teamBoxes.length === 0) return;
+      
+      // Calculate new image position and scale
+      const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+      const scaledWidth = backgroundImage.width * scale;
+      const scaledHeight = backgroundImage.height * scale;
+      const imageX = (canvas.width - scaledWidth) / 2;
+      const imageY = (canvas.height - scaledHeight) / 2 + 60; // Add toolbar offset
+      
+      // Calculate box size based on image scale
+      const boxWidth = Math.max(50, scaledWidth * 0.055); // Minimum 50px, smaller width
+      const boxHeight = Math.max(25, scaledHeight * 0.025); // Minimum 25px, thinner boxes
+      const fontSize = Math.max(12, scale * 14); // Minimum 12px, scales with image
+      const padding = Math.max(4, scale * 6); // Minimum 4px, less padding for thinner boxes
+      
+      // Position teams relative to the scaled image - fine-tuned for exact positioning
+      const leftPosition = imageX + (scaledWidth * 0.365);
+      const rightPosition = imageX + (scaledWidth * 0.57); // Moved left significantly from 0.635 to 0.57
+      const verticalSpacing = scaledHeight * 0.24;
+      const startTop = imageY + (scaledHeight * 0.235); // Moved down just a tad from 0.20 to 0.235
+
+      let redIndex = 0;
+      let blueIndex = 0;
+      
+      teamBoxes.forEach(box => {
+        // Update box size and styling
+        box.style.width = `${boxWidth}px`;
+        box.style.height = `${boxHeight}px`;
+        box.style.fontSize = `${fontSize}px`;
+        box.style.padding = `${padding}px`;
+        box.style.lineHeight = `${boxHeight - (padding * 2)}px`;
+        
+        // Update position
+        if (box.classList.contains('red')) {
+          box.style.left = `${leftPosition}px`;
+          box.style.top = `${startTop + redIndex * verticalSpacing}px`;
+          redIndex++;
+        } else if (box.classList.contains('blue')) {
+          box.style.left = `${rightPosition}px`;
+          box.style.top = `${startTop + blueIndex * verticalSpacing}px`;
+          blueIndex++;
+        }
+      });
+    }
+
+    // Save Modal Functions - Removed (no longer needed)
+
+    function showSuccessNotification() {
+      const notification = document.getElementById('successNotification');
+      notification.classList.add('show');
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    function showWarningNotification(message) {
+      const notification = document.getElementById('warningNotification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    function showErrorNotification(message) {
+      const notification = document.getElementById('errorNotification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    function saveLocallyDirect() {
+      // Generate a timestamp-based filename
+      const now = new Date();
+      const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, -5);
+      const title = `whiteboard_${timestamp}`;
+      
+      // Create a composite image that includes team boxes
+      const compositeCanvas = document.createElement('canvas');
+      const compositeCtx = compositeCanvas.getContext('2d');
+      compositeCanvas.width = canvas.width;
+      compositeCanvas.height = canvas.height;
+      
+      // Draw the current canvas content (background + drawings)
+      compositeCtx.drawImage(canvas, 0, 0);
+      
+      // Draw team boxes onto the composite canvas
+      const teamBoxes = document.querySelectorAll('.team-box');
+      teamBoxes.forEach(box => {
+        const rect = box.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+        
+        // Calculate position relative to canvas
+        const x = rect.left - canvasRect.left;
+        const y = rect.top - canvasRect.top;
+        const width = rect.width;
+        const height = rect.height;
+        
+        // Set team box styling
+        compositeCtx.save();
+        
+        // Draw team box background
+        if (box.classList.contains('red')) {
+          compositeCtx.fillStyle = '#ffdddd';
+          compositeCtx.strokeStyle = '#ff4d4d';
+        } else {
+          compositeCtx.fillStyle = '#ddeeff';
+          compositeCtx.strokeStyle = '#3399ff';
+        }
+        
+        compositeCtx.lineWidth = 2;
+        compositeCtx.fillRect(x, y, width, height);
+        compositeCtx.strokeRect(x, y, width, height);
+        
+        // Draw team number text
+        compositeCtx.fillStyle = '#000';
+        compositeCtx.font = 'bold ' + window.getComputedStyle(box).fontSize + ' ' + window.getComputedStyle(box).fontFamily;
+        compositeCtx.textAlign = 'center';
+        compositeCtx.textBaseline = 'middle';
+        compositeCtx.fillText(box.textContent, x + width/2, y + height/2);
+        
+        compositeCtx.restore();
+      });
+      
+      // Download the composite image
+      const link = document.createElement('a');
+      link.download = `${title}.png`;
+      link.href = compositeCanvas.toDataURL('image/png');
+      link.click();
+      
+      // Show success notification
+      showSuccessNotification();
+    }
+
+    // Close save modal when clicking overlay - Removed (no longer needed)
+
+    // Warn on refresh
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+
+    // Auto-open popup when page loads
+    window.addEventListener('load', function() {
+      openPopup();
+    });
+  </script>
+</body>
+
+</html>
