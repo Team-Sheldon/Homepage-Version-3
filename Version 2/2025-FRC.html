@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Whiteboard</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    :root {
+      --primary: #00205b;
+      --accent: #ffcc00;
+      --bg: #f9f9f9;
+      --text: #333;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-top: 60px;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: white;
+      cursor: crosshair;
+      z-index: 0;
+    }
+
+    .toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(249,249,249,0.98) 100%);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      padding: 12px 16px;
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+      opacity: 1;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      transition: all 0.3s ease;
+    }
+
+    .toolbar:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .toolbar-content {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: nowrap;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .drag-handle {
+      cursor: move;
+      padding: 4px 8px;
+      background: var(--accent);
+      border-radius: 6px;
+      user-select: none;
+      font-weight: bold;
+      font-size: 14px;
+      color: var(--primary);
+    }
+
+    .toolbar button {
+      background: linear-gradient(135deg, var(--primary) 0%, #001742 100%);
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 11px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,32,91,0.3);
+      flex-shrink: 0;
+    }
+
+    .toolbar button:hover {
+      background: linear-gradient(135deg, #003d7a 0%, var(--primary) 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0,32,91,0.4);
+    }
+
+    .toolbar button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0,32,91,0.3);
+    }
+
+    .toolbar input[type="color"],
+    .toolbar input[type="range"] {
+      cursor: pointer;
+    }
+
+    .toolbar input[type="color"] {
+      width: 28px;
+      height: 28px;
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .toolbar input[type="color"]:hover {
+      border-color: var(--primary);
+      transform: scale(1.05);
+    }
+
+    .toolbar input[type="range"] {
+      width: 70px;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: 3px;
+      outline: none;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .toolbar input[type="range"]:hover {
+      transform: scaleY(1.2);
+    }
+
+    .toolbar input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: all 0.2s ease;
+    }
+
+    .toolbar input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+
+    .toolbar label {
+      font-size: 14px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .toolbar label:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.1);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(320px, 90vw);
+      max-height: min(500px, 80vh);
+      background: var(--bg);
+      border: 1px solid #ddd;
+      padding: 16px;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      z-index: 25;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .sidebar.show {
+      display: block;
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 20;
+      display: block;
+    }
+
+    .sidebar-overlay.show {
+      display: block;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .sidebar-header h2 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text);
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .close-button:hover {
+      background: #f0f0f0;
+    }
+
+    .sidebar h3 {
+      margin: 12px 0 6px;
+      color: var(--primary);
+    }
+
+    .success-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      font-weight: bold;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+    }
+
+    .success-notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .warning-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #dc3545;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      font-weight: bold;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+    }
+
+    .warning-notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    .submit-button, .lock-button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 6px;
+    }
+
+    .team-box {
+      position: absolute;
+      background: #ddd;
+      border-radius: 6px;
+      cursor: move;
+      font-weight: bold;
+      user-select: none;
+      text-align: center;
+      /* Size will be set dynamically by JavaScript */
+    }
+
+    .red { background: #ffdddd; border: 2px solid #ff4d4d; }
+    .blue { background: #ddeeff; border: 2px solid #3399ff; }
+
+    .tabs {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  background: white;
+  border-bottom: 2px solid #ccc;
+  display: flex;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.tabs button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.active-tab {
+  background: var(--accent);
+  color: black;
+}    canvas {
+      position: absolute;
+      top: 60px;
+      left: 0px;
+      z-index: 0;
+      width: 100%;
+      height: calc(100% - 60px);
+    }
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .toolbar {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    top: auto;
+    max-width: none;
+    padding: 12px 8px;
+    border-radius: 20px;
+    gap: 8px;
+  }
+  
+  .toolbar-content {
+    justify-content: center;
+    gap: 6px;
+  }
+  
+  .toolbar button {
+    padding: 10px 8px;
+    font-size: 10px;
+    border-radius: 6px;
+  }
+  
+  .drag-handle {
+    display: none;
+  }
+  
+  .toolbar input[type="color"] {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .toolbar input[type="range"] {
+    width: 60px;
+  }
+  
+  .toolbar label {
+    font-size: 14px;
+  }
+  
+  .sidebar {
+    width: min(300px, 95vw);
+    max-height: 85vh;
+    padding: 12px;
+  }
+  
+  .sidebar h3 {
+    font-size: 14px;
+    margin: 8px 0 4px;
+  }
+  
+  .sidebar-header h2 {
+    font-size: 16px;
+  }
+  
+  input[type="text"] {
+    padding: 6px;
+    font-size: 14px;
+  }
+  
+  .submit-button {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .toolbar {
+    padding: 8px 4px;
+    gap: 4px;
+    border-radius: 16px;
+  }
+  
+  .toolbar-content {
+    gap: 4px;
+  }
+  
+  .toolbar button {
+    padding: 8px 6px;
+    font-size: 9px;
+    border-radius: 4px;
+  }
+  
+  .toolbar input[type="color"] {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .toolbar input[type="range"] {
+    width: 50px;
+  }
+  
+  .toolbar label {
+    font-size: 12px;
+  }
+  
+  .sidebar {
+    width: min(280px, 98vw);
+    padding: 8px;
+  }
+  
+  .sidebar h3 {
+    font-size: 12px;
+  }
+  
+  .sidebar-header h2 {
+    font-size: 14px;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- Back Arrow Button -->
+  <button class="button" onclick="goBackSafely()"style="
+   position: fixed;
+   top: 0;
+   right: 0;
+   background-color: var(--primary);
+   color: white;
+   border: none;
+   border-radius: 0 0 0 8px;
+   padding: 10px 14px;
+   font-size: 18px;
+   font-weight: bold;
+   cursor: pointer;
+   z-index: 30;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 53px;
+   ">← Back </button>
+
+  <div class="toolbar" id="toolbar">
+    <div class="toolbar-content" id="toolbarContent">
+      <button onclick="setMode('draw')">✏️ Draw</button>
+      <button onclick="setMode('erase')">🧽 Erase</button>
+      <button onclick="clearCanvas()">🗑️ Clear</button>
+      <button onclick="undoLast()">↶ Undo</button>
+      <label for="colourPicker">🎨</label>
+      <input type="color" id="colourPicker" value="#000000" onchange="changeColour(this.value)" />
+      <label for="thicknessRange">🖌️</label>
+      <input type="range" id="thicknessRange" min="1" max="50" value="5" onchange="changeThickness(this.value)" />
+      <button onclick="saveCanvas()">💾 Save</button>
+      <button id="lockToggle" onclick="toggleLock()">🔓 Unlock</button>
+    </div>
+  </div>
+  
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Team Setup</h2>
+      <button class="close-button" onclick="closeTeamSetupSafely()">×</button>
+    </div>
+    <h3>Red Alliance</h3>
+    <input type="number" id="redInput" placeholder="Enter team number" onkeydown="addTeam(event, 'red')" oninput="validateNumberInput(this)">
+    <ul id="redList"></ul>
+    <h3>Blue Alliance</h3>
+    <input type="number" id="blueInput" placeholder="Enter team number" onkeydown="addTeam(event, 'blue')" oninput="validateNumberInput(this)">
+    <ul id="blueList"></ul>
+    <button class="submit-button" onclick="submitAlliances()">Submit</button>
+  </div>
+
+
+
+  <canvas id="whiteboard"></canvas>
+
+  <!-- Success Notification -->
+  <div id="successNotification" class="success-notification">
+    ✅ Whiteboard saved successfully!
+  </div>
+
+  <!-- Warning Notification -->
+  <div id="warningNotification" class="warning-notification">
+    ⚠️ You can only have 3 teams per alliance!
+  </div>
+
+  <!-- Error Notification -->
+  <div id="errorNotification" class="warning-notification">
+    ❌ Please enter both title and scout name!
+  </div>
+
+  <script>
+    const canvas = document.getElementById('whiteboard');
+    const ctx = canvas.getContext('2d');
+    const toolbar = document.getElementById('toolbar');
+    const sidebar = document.getElementById('sidebar');
+    const lockToggle = document.getElementById('lockToggle');
+    const toolbarContent = document.getElementById('toolbarContent');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - 60;
+
+    let drawing = false;
+    let mode = 'draw';
+    let drawColour = '#000000';
+    let drawThickness = 5;
+    let backgroundImage = new Image();
+    let locked = false;
+    let undoStack = [];
+    let maxUndoSteps = 20;
+
+    backgroundImage.src = './Files/Images/2025 FRC Field.png'; // Change to your field image
+    backgroundImage.onload = () => {
+      // Calculate scale to maintain aspect ratio
+      const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+      const scaledWidth = backgroundImage.width * scale;
+      const scaledHeight = backgroundImage.height * scale;
+      
+      // Center the image on the canvas
+      const x = (canvas.width - scaledWidth) / 2;
+      const y = (canvas.height - scaledHeight) / 2;
+      
+      // Draw image with proper scaling
+      ctx.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight);
+      
+      // Save initial state for undo
+      saveCanvasState();
+    };
+
+    function saveCanvasState() {
+      undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+      if (undoStack.length > maxUndoSteps) {
+        undoStack.shift(); // Remove oldest state
+      }
+    }
+
+    function undoLast() {
+      if (undoStack.length > 1) {
+        undoStack.pop(); // Remove current state
+        const previousState = undoStack[undoStack.length - 1];
+        ctx.putImageData(previousState, 0, 0);
+      }
+    }
+
+    function setMode(newMode) { 
+      mode = newMode;
+      // Reset composite operation when switching modes
+      if (mode === 'erase') {
+        ctx.globalCompositeOperation = 'destination-out';
+      } else {
+        ctx.globalCompositeOperation = 'source-over';
+      }
+    }
+    function changeColour(newColour) { drawColour = newColour; }
+    function changeThickness(newThickness) { drawThickness = newThickness; }
+    function clearCanvas() {
+      // Reset composite operation BEFORE clearing and redrawing
+      ctx.globalCompositeOperation = 'source-over';
+      mode = 'draw'; // Reset mode to draw
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Immediately redraw the background image
+      if (backgroundImage.complete) {
+        // Calculate scale to maintain aspect ratio
+        const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+        const scaledWidth = backgroundImage.width * scale;
+        const scaledHeight = backgroundImage.height * scale;
+        
+        // Center the image on the canvas
+        const x = (canvas.width - scaledWidth) / 2;
+        const y = (canvas.height - scaledHeight) / 2;
+        
+        // Draw image with proper scaling
+        ctx.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight);
+      }
+      
+      // Clear undo stack and save new state
+      undoStack = [];
+      saveCanvasState();
+    }
+    function saveCanvas() {
+      // Always save locally when save button is clicked
+      saveLocallyDirect();
+    }
+
+    function validateNumberInput(input) {
+        // Remove any non-numeric characters
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+
+    function addTeam(event, alliance) {
+      if (event.key === 'Enter') {
+        const input = document.getElementById(alliance + 'Input');
+        const list = document.getElementById(alliance + 'List');
+        const teamNumber = input.value.trim();
+        if (teamNumber && list.children.length < 3) {
+          const listItem = document.createElement('li');
+          listItem.textContent = teamNumber;
+          listItem.onclick = () => listItem.remove();
+          list.appendChild(listItem);
+          input.value = '';
+        } else if (list.children.length >= 3) {
+          input.value = '';
+          showWarningNotification('⚠️ You can only have 3 teams per alliance!');
+        }
+        checkAllianceReadiness();
+      }
+    }
+
+    function checkAllianceReadiness() {
+      const redCount = document.getElementById('redList').children.length;
+      const blueCount = document.getElementById('blueList').children.length;
+      if (redCount >= 3 && blueCount >= 3) toolbar.classList.add('enabled');
+      else toolbar.classList.remove('enabled');
+    }
+
+    function submitAlliances() {
+      const redTeams = Array.from(document.getElementById('redList').children).map(li => li.textContent);
+      const blueTeams = Array.from(document.getElementById('blueList').children).map(li => li.textContent);
+      closePopup();
+      toolbar.classList.add('enabled'); // allow drawing tools after submission
+      
+      // Calculate image position and scale
+      const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+      const scaledWidth = backgroundImage.width * scale;
+      const scaledHeight = backgroundImage.height * scale;
+      const imageX = (canvas.width - scaledWidth) / 2;
+      const imageY = (canvas.height - scaledHeight) / 2 + 60; // Add toolbar offset
+      
+      // Calculate box size based on image scale
+      const boxWidth = Math.max(50, scaledWidth * 0.055); // Minimum 50px, smaller width
+      const boxHeight = Math.max(25, scaledHeight * 0.025); // Minimum 25px, thinner boxes
+      const fontSize = Math.max(12, scale * 14); // Minimum 12px, scales with image
+      const padding = Math.max(4, scale * 6); // Minimum 4px, less padding for thinner boxes
+      
+      // Position teams relative to the scaled image - fine-tuned for exact positioning
+      const leftPosition = imageX + (scaledWidth * 0.365); // More precise for ~580px
+      const rightPosition = imageX + (scaledWidth * 0.57); // Moved left significantly from 0.635 to 0.57
+      const verticalSpacing = scaledHeight * 0.24; // Adjusted for better 165px spacing
+      const startTop = imageY + (scaledHeight * 0.235); // Moved down just a tad from 0.20 to 0.23
+
+      // Place red alliance teams on the left
+      redTeams.forEach((team, i) => {
+        const div = document.createElement('div');
+        div.className = 'team-box red';
+        div.textContent = team;
+        div.style.left = `${leftPosition}px`;
+        div.style.top = `${startTop + i * verticalSpacing}px`;
+        div.style.width = `${boxWidth}px`;
+        div.style.height = `${boxHeight}px`;
+        div.style.fontSize = `${fontSize}px`;
+        div.style.padding = `${padding}px`;
+        div.style.lineHeight = `${boxHeight - (padding * 2)}px`;
+        document.body.appendChild(div);
+        makeDraggable(div);
+      });
+      
+      // Place blue alliance teams on the right
+      blueTeams.forEach((team, i) => {
+        const div = document.createElement('div');
+        div.className = 'team-box blue';
+        div.textContent = team;
+        div.style.left = `${rightPosition}px`;
+        div.style.top = `${startTop + i * verticalSpacing}px`;
+        div.style.width = `${boxWidth}px`;
+        div.style.height = `${boxHeight}px`;
+        div.style.fontSize = `${fontSize}px`;
+        div.style.padding = `${padding}px`;
+        div.style.lineHeight = `${boxHeight - (padding * 2)}px`;
+        document.body.appendChild(div);
+        makeDraggable(div);
+      });
+    }
+
+    function openPopup() {
+      document.getElementById('sidebar').classList.add('show');
+      document.getElementById('sidebarOverlay').classList.add('show');
+    }
+
+    function closePopup() {
+      document.getElementById('sidebar').style.display = 'none';
+      document.getElementById('sidebarOverlay').style.display = 'none';
+    }
+
+    function closeTeamSetupSafely() {
+      // Temporarily disable the beforeunload warning
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+      // Navigate away
+      window.location.href = 'https://www.firstinspires.org/';
+    }
+
+    function goBackSafely() {
+      // Temporarily disable the beforeunload warning
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+      // Navigate away
+      window.location.href = 'https://www.firstinspires.org/';
+    }
+
+    // Store the beforeunload handler so we can remove it
+    function beforeUnloadHandler(e) {
+      e.preventDefault();
+      e.returnValue = 'Are you sure you want to leave? Your changes may not be saved.';
+    }
+
+
+    function toggleLock() {
+      locked = !locked;
+      lockToggle.textContent = locked ? '🔒 Lock' : '🔓 Unlock';
+    }
+
+    function makeDraggable(el) {
+      let offsetX = 0, offsetY = 0, isDragging = false;
+
+      el.addEventListener('mousedown', e => {
+        if (locked) return;
+        isDragging = true;
+        offsetX = e.clientX - el.offsetLeft;
+        offsetY = e.clientY - el.offsetTop;
+        el.style.zIndex = 1000;
+      });
+
+      document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        el.style.left = `${e.clientX - offsetX}px`;
+        el.style.top = `${e.clientY - offsetY}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        el.style.zIndex = 1;
+      });
+    }
+
+    // Draw on Canvas
+    canvas.addEventListener('mousedown', () => {
+        drawing = true;
+    });
+    canvas.addEventListener('mouseup', () => {
+      if (drawing) {
+        drawing = false;
+        ctx.beginPath();
+        // Save canvas state after each drawing action
+        saveCanvasState();
+      }
+    });
+    canvas.addEventListener('mousemove', draw);
+
+    function draw(e) {
+      if (!drawing || !toolbar.classList.contains('enabled')) return;
+      ctx.lineWidth = drawThickness;
+      ctx.lineCap = 'round';
+      
+      if (mode === 'erase') {
+        ctx.globalCompositeOperation = 'destination-out';
+        // Don't set strokeStyle for erasing - it should remove pixels
+      } else {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = drawColour;
+      }
+      
+      ctx.lineTo(e.clientX, e.clientY - 60);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX, e.clientY - 60);
+    }
+
+    // Handle Window Resize
+    window.addEventListener('resize', () => {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 60;
+      ctx.putImageData(imageData, 0, 0);
+      if (backgroundImage.complete) {
+        // Calculate scale to maintain aspect ratio
+        const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+        const scaledWidth = backgroundImage.width * scale;
+        const scaledHeight = backgroundImage.height * scale;
+        
+        // Center the image on the canvas
+        const x = (canvas.width - scaledWidth) / 2;
+        const y = (canvas.height - scaledHeight) / 2;
+        
+        // Draw image with proper scaling
+        ctx.drawImage(backgroundImage, x, y, scaledWidth, scaledHeight);
+        
+        // Reposition team boxes relative to the new image position
+        repositionTeamBoxes();
+      }
+    });
+
+    function repositionTeamBoxes() {
+      const teamBoxes = document.querySelectorAll('.team-box');
+      if (teamBoxes.length === 0) return;
+      
+      // Calculate new image position and scale
+      const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+      const scaledWidth = backgroundImage.width * scale;
+      const scaledHeight = backgroundImage.height * scale;
+      const imageX = (canvas.width - scaledWidth) / 2;
+      const imageY = (canvas.height - scaledHeight) / 2 + 60; // Add toolbar offset
+      
+      // Calculate box size based on image scale
+      const boxWidth = Math.max(50, scaledWidth * 0.055); // Minimum 50px, smaller width
+      const boxHeight = Math.max(25, scaledHeight * 0.025); // Minimum 25px, thinner boxes
+      const fontSize = Math.max(12, scale * 14); // Minimum 12px, scales with image
+      const padding = Math.max(4, scale * 6); // Minimum 4px, less padding for thinner boxes
+      
+      // Position teams relative to the scaled image - fine-tuned for exact positioning
+      const leftPosition = imageX + (scaledWidth * 0.365);
+      const rightPosition = imageX + (scaledWidth * 0.57); // Moved left significantly from 0.635 to 0.57
+      const verticalSpacing = scaledHeight * 0.24;
+      const startTop = imageY + (scaledHeight * 0.235); // Moved down just a tad from 0.20 to 0.235
+
+      let redIndex = 0;
+      let blueIndex = 0;
+      
+      teamBoxes.forEach(box => {
+        // Update box size and styling
+        box.style.width = `${boxWidth}px`;
+        box.style.height = `${boxHeight}px`;
+        box.style.fontSize = `${fontSize}px`;
+        box.style.padding = `${padding}px`;
+        box.style.lineHeight = `${boxHeight - (padding * 2)}px`;
+        
+        // Update position
+        if (box.classList.contains('red')) {
+          box.style.left = `${leftPosition}px`;
+          box.style.top = `${startTop + redIndex * verticalSpacing}px`;
+          redIndex++;
+        } else if (box.classList.contains('blue')) {
+          box.style.left = `${rightPosition}px`;
+          box.style.top = `${startTop + blueIndex * verticalSpacing}px`;
+          blueIndex++;
+        }
+      });
+    }
+
+    // Save Modal Functions - Removed (no longer needed)
+
+    function showSuccessNotification() {
+      const notification = document.getElementById('successNotification');
+      notification.classList.add('show');
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    function showWarningNotification(message) {
+      const notification = document.getElementById('warningNotification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    function showErrorNotification(message) {
+      const notification = document.getElementById('errorNotification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    function saveLocallyDirect() {
+      // Generate a timestamp-based filename
+      const now = new Date();
+      const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, -5);
+      const title = `whiteboard_${timestamp}`;
+      
+      // Create a composite image that includes team boxes
+      const compositeCanvas = document.createElement('canvas');
+      const compositeCtx = compositeCanvas.getContext('2d');
+      compositeCanvas.width = canvas.width;
+      compositeCanvas.height = canvas.height;
+      
+      // Draw the current canvas content (background + drawings)
+      compositeCtx.drawImage(canvas, 0, 0);
+      
+      // Draw team boxes onto the composite canvas
+      const teamBoxes = document.querySelectorAll('.team-box');
+      teamBoxes.forEach(box => {
+        const rect = box.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+        
+        // Calculate position relative to canvas
+        const x = rect.left - canvasRect.left;
+        const y = rect.top - canvasRect.top;
+        const width = rect.width;
+        const height = rect.height;
+        
+        // Set team box styling
+        compositeCtx.save();
+        
+        // Draw team box background
+        if (box.classList.contains('red')) {
+          compositeCtx.fillStyle = '#ffdddd';
+          compositeCtx.strokeStyle = '#ff4d4d';
+        } else {
+          compositeCtx.fillStyle = '#ddeeff';
+          compositeCtx.strokeStyle = '#3399ff';
+        }
+        
+        compositeCtx.lineWidth = 2;
+        compositeCtx.fillRect(x, y, width, height);
+        compositeCtx.strokeRect(x, y, width, height);
+        
+        // Draw team number text
+        compositeCtx.fillStyle = '#000';
+        compositeCtx.font = 'bold ' + window.getComputedStyle(box).fontSize + ' ' + window.getComputedStyle(box).fontFamily;
+        compositeCtx.textAlign = 'center';
+        compositeCtx.textBaseline = 'middle';
+        compositeCtx.fillText(box.textContent, x + width/2, y + height/2);
+        
+        compositeCtx.restore();
+      });
+      
+      // Download the composite image
+      const link = document.createElement('a');
+      link.download = `${title}.png`;
+      link.href = compositeCanvas.toDataURL('image/png');
+      link.click();
+      
+      // Show success notification
+      showSuccessNotification();
+    }
+
+    // Close save modal when clicking overlay - Removed (no longer needed)
+
+    // Warn on refresh
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+
+    // Auto-open popup when page loads
+    window.addEventListener('load', function() {
+      openPopup();
+    });
+  </script>
+</body>
+
+</html>

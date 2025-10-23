@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Sheldon</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+    }
+
+    header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #00205b;
+      color: white;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .team-name {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+
+    .contact-link {
+      position: fixed;
+      Right: 120px;
+      top: 20px;
+      font-size: 1em;
+      text-decoration: none;
+      color: white;
+    }
+
+    .burger-menu {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000000;
+
+    }
+
+    .burger-icon {
+      background-color: #00205b;
+      color: white;
+      border: none;
+      padding: 1px 15px;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .sidebar {
+      position: fixed;
+      Top: 0;
+      Right: 0;
+      width: 250px;
+      background-color: #00205b;
+      color: white;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 999;
+      border-bottom-left-radius: 0.75rem;
+      border-bottom-right-radius: 0.75rem;
+    }
+
+    .sidebar.open {
+      position: fixed;
+      transform: translateX(0);
+      z-index: 999;
+    }
+
+    .sidebar-x {
+      text-align: right;
+      height: auto;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 0px;
+    }
+
+    .sidebar .logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      height: 60px;
+      border-radius: 8px;
+      margin-top: 0px;
+    }
+
+    .sidebar-a {
+      margin: 15px 0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 40px;
+      text-align: center;
+    }
+
+    section {
+      padding: 40px;
+      border-top: 1px solid #ccc;
+      text-align: center;
+    }
+    
+    footer {
+      background-color: #f0f0f0;
+      text-align: center;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
+      font-size: 0.9em;
+      color: #555;
+      border-top: 1px solid #ccc;
+    }
+
+    .title {
+      margin: 50px 100px;
+      font-size: 3em;
+      margin-bottom: 40px;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin-top: 20px;
+      color: #00205b;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.2em;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .columns {
+      margin-bottom: 20px 40px;
+      margin-left: 20px 40px;
+      margin-right: 20px 40px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    
+    .column {
+      display: flex;
+      align-items: flex-start; /* logo aligns with top of text */
+      gap: 20px; /* space between text and image */
+      flex-wrap: wrap; 
+    }
+    
+    .column-content {
+      flex: 1;
+      width: 100%;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    
+    .column-content-p{
+      margin: 10px;
+      display: flex;
+      flex-direction: list;
+      flex-wrap: wrap;
+      gap: 20px;
+      line-height: 1.6;
+      justify-content: center;
+    }
+
+    .column-content-p-1 {
+      background-color: #00205b;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .column-content-p-2 {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px;
+      color: #00205b;
+    }
+
+    .column-content-p-2:hover {
+      transform: scale(1.2);
+    }
+    
+    .column-content-p-1:hover {
+      transform: scale(1.2);
+    }
+
+    .footer-credit {
+      font-size: 1em;
+      color: #555;
+    }
+    
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <a href="index.html"><img src="logo.png" alt="Team Sheldon Logo" class="logo"></a>
+      <a href="index.html"class="team-name">Team Sheldon</a>
+    </div>
+    <a href="contact-us.html" class="contact-link"><i class="fas fa-envelope"></i> Contact Us</a>
+    <div class="burger-menu">
+      <button class="burger-icon" onclick="toggleSidebar()">☰ Menu</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="title">Contact Us</div>
+    <section id="contact" style="padding: 80px 20px; display: flex; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 40px; border-radius: 16px; max-width: 600px; width: 100%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+            <h2 style="text-align: center; color: #00205b; font-size: 2em; margin-bottom: 30px;">Contact Team Sheldon</h2>
+            <form action="https://formspree.io/f/mzzgrrng" method="POST">
+                
+                <div style="margin-bottom: 20px;">
+                    <label for="name" style="display: block; font-weight: bold; margin-bottom: 8px;">Your Name</label>
+                    <input type="text" id="name" name="name" required style="width: 95%; padding: 14px; border: 1px solid #ccc; border-radius: 8px;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label for="email" style="display: block; font-weight: bold; margin-bottom: 8px;">Your Email</label>
+                    <input type="email" id="email" name="_replyto" required
+                    style="width: 95%; padding: 14px; border: 1px solid #ccc; border-radius: 8px;">
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <label for="message" style="display: block; font-weight: bold; margin-bottom: 8px;">Your Message</label>
+                    <textarea id="message" name="message" rows="6" required style="width: 95%; padding: 14px; border: 1px solid #ccc; border-radius: 8px;"></textarea>
+                </div>
+                
+                <button type="submit"style="width: 100%; background-color: #00205b; color: white; padding: 14px; font-size: 1em; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s;">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+  </main>
+
+  <div class="sidebar" id="sidebar">
+    <div class="X">
+      <a class="sidebar-x" onclick="toggleSidebar()">X</a>
+    </div>
+    <a href="index.html"><img src="logo.png" alt="Team Sheldon Logo" class="logo"></a>
+    <a href="index.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-home"></i> Home</a>
+    <a href="our-team.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-people-group"></i> Our Team</a>
+    <a href="sponsors.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-handshake"></i> Our Sponsors</a>
+    <a href="achievements.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-trophy"></i> Our Achievements</a>
+    <a href="robots.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-robot"></i> Robots</a>
+  </div>
+
+  <footer>
+    <div class="columns">
+        <div class="column">
+          <div class="column-content">
+            <div class="column-content-h2">
+              <h2>Sitemap</h2>
+            </div>
+            <div class="column-content-p">
+              <a href="index.html"class="column-content-p-2"><i class="fas fa-home"></i> Home</a>
+              <a href="our-team.html"class="column-content-p-2"><i class="fas fa-people-group"></i> Our Team</a>
+              <a href="sponsors.html"class="column-content-p-2"><i class="fas fa-handshake"></i> Our Sponsors</a>
+              <a href="achievements.html"class="column-content-p-2"><i class="fas fa-trophy"></i> Our Achievements</a>
+              <a href="robots.html"class="column-content-p-2"><i class="fas fa-robot"></i> Robots</a>
+              <a href="contact-us.html"class="column-content-p-2"><i class="fas fa-envelope"></i> Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="footer-credit">©2024–2025 Sheldon College (Team-sheldon)</p>
+  </footer>
+  <script>
+  function toggleSidebar() {
+    document.getElementById('sidebar')
+    document.getElementById('sidebar').classList.toggle('open');
+    }
+</script>
+</body>
+</html>

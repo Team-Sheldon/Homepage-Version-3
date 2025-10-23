@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Sheldon</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+    }
+
+    header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #00205b;
+      color: white;
+      z-index: 100;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .team-name {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+
+    .contact-link {
+      position: fixed;
+      Right: 120px;
+      top: 20px;
+      font-size: 1em;
+      text-decoration: none;
+      color: white;
+    }
+
+    .burger-menu {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000000;
+
+    }
+
+    .burger-icon {
+      background-color: #00205b;
+      color: white;
+      border: none;
+      padding: 1px 15px;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .sidebar {
+      position: fixed;
+      Top: 0;
+      Right: 0;
+      width: 250px;
+      background-color: #00205b;
+      color: white;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 999;
+      border-bottom-left-radius: 0.75rem;
+      border-bottom-right-radius: 0.75rem;
+    }
+
+    .sidebar.open {
+      position: fixed;
+      transform: translateX(0);
+      z-index: 999;
+    }
+
+    .sidebar-x {
+      text-align: right;
+      height: auto;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 0px;
+    }
+
+    .sidebar .logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      height: 60px;
+      border-radius: 8px;
+      margin-top: 0px;
+    }
+
+    .sidebar-a {
+      margin: 15px 0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 40px;
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    section {
+      padding: 40px;
+      border-top: 1px solid #ccc;
+      text-align: center;
+    }
+    
+    footer {
+      background-color: #f0f0f0;
+      text-align: center;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
+      font-size: 0.9em;
+      color: #555;
+      border-top: 1px solid #ccc;
+    }
+
+    .title {
+      margin: 50px 100px;
+      font-size: 3em;
+      margin-bottom: 40px;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin-top: 20px;
+      color: #00205b;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.2em;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .columns {
+      margin-bottom: 20px 40px;
+      margin-left: 20px 40px;
+      margin-right: 20px 40px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    
+    .column {
+      display: flex;
+      align-items: flex-start; /* logo aligns with top of text */
+      gap: 20px; /* space between text and image */
+      flex-wrap: wrap; 
+    }
+    
+    .column-content {
+      flex: 1;
+      width: 100%;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    
+    .column-content-p{
+      margin: 10px;
+      display: flex;
+      flex-direction: list;
+      flex-wrap: wrap;
+      gap: 20px;
+      line-height: 1.6;
+      justify-content: center;
+    }
+
+    .column-content-p-1 {
+      background-color: #00205b;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .column-content-p-2 {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px;
+      color: #00205b;
+    }
+
+    .column-content-p-2:hover {
+      transform: scale(1.2);
+    }
+    
+    .column-content-p-1:hover {
+      transform: scale(1.2);
+    }
+
+    .footer-credit {
+      font-size: 1em;
+      color: #555;
+    }
+
+    .BSQITD {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px auto;
+      max-width: 1000px;
+    }
+
+    .BSQITD-img {
+      width: 75%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .BSQITD p {
+      font-size: 1.2em;
+      line-height: 1.6;
+      color: #333;
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .BSQITD h2 {
+      font-size: 2em;
+      color: #00205b;
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .events-section {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .events-section h2 {
+  font-size: 2em;
+  color: #00205b;
+  margin-bottom: 30px;
+}
+
+.events-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.event-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 300px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.event-card:hover {
+  transform: scale(1.05);
+}
+
+.event-card h3 {
+  color: #00205b;
+  margin-bottom: 10px;
+}
+
+.event-card p {
+  color: #333;
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+      }
+
+      .logo-container {
+        margin-bottom: 10px;
+      }
+
+      .contact-link {
+        position: static;
+        margin-top: 10px;
+      }
+
+      .burger-menu {
+        position: static;
+        margin-top: 10px;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        right: 0;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      main {
+        padding: 20px;
+        margin-top: 120px;
+      }
+
+      section {
+        padding: 20px;
+      }
+
+      .BSQITD {
+        padding: 15px;
+        margin: 10px auto;
+      }
+
+      .BSQITD-img {
+        width: 100%;
+      }
+
+      .BSQITD h2 {
+        font-size: 1.5em;
+        text-align: center;
+      }
+
+      .BSQITD p {
+        font-size: 1em;
+        text-align: justify;
+      }
+
+      .events-section {
+        padding: 20px 10px;
+      }
+
+      .events-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .event-card {
+        max-width: 100%;
+        margin: 10px 0;
+      }
+
+      .columns {
+        margin: 10px 10px;
+        padding: 10px;
+      }
+
+      .column-content-p {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .team-name {
+        font-size: 1.2em;
+      }
+
+      .logo {
+        height: 30px;
+      }
+
+      main {
+        padding: 15px;
+        margin-top: 140px;
+      }
+
+      section {
+        padding: 15px;
+      }
+
+      .BSQITD {
+        padding: 10px;
+        margin: 5px auto;
+      }
+
+      .BSQITD h2 {
+        font-size: 1.3em;
+      }
+
+      .BSQITD p {
+        font-size: 0.9em;
+        line-height: 1.4;
+      }
+
+      .events-section h2 {
+        font-size: 1.5em;
+      }
+
+      .event-card {
+        padding: 15px;
+      }
+
+      .event-card h3 {
+        font-size: 1.1em;
+      }
+
+      .event-card p {
+        font-size: 0.85em;
+      }
+
+      .sidebar {
+        width: 100vw;
+        padding: 15px;
+      }
+
+      .burger-icon {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+
+      .column-content-p-1,
+      .column-content-p-2 {
+        padding: 8px;
+        font-size: 0.9em;
+      }
+    }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <a href="index.html"><img src="logo.png" alt="Team Sheldon Logo" class="logo"></a>
+      <a href="index.html"class="team-name">Team Sheldon</a>
+    </div>
+    <a href="contact-us.html" class="contact-link"><i class="fas fa-envelope"></i> Contact Us</a>
+    <div class="burger-menu">
+      <button class="burger-icon" onclick="toggleSidebar()">☰ Menu</button>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="BSQITD">
+        <img src="./Files/Images/FTC2024.JPG" alt="2024 BSQITD Robot" class="BSQITD-img">
+        <h2>FIRST® Tech Challenge - 2024</h2>
+        <p>Team Sheldon proudly competed as Sheldon1 at the 2024 Brisbane South Qualifier, held on Saturday, 16 November at St Peters 
+            Lutheran College in Indooroopilly, QLD. The event, known by its code 
+            <a href="https://ftc-events.firstinspires.org/2024/AUINQ">AUINQ</a>
+            , was part of Week 10 since kickoff and brought together some of the brightest young robotics minds in the region. With 
+            months of design, testing, and problem-solving behind us, our robot hit the field ready to perform—and it did not disappoint. 
+            We were thrilled to be awarded the 
+            <a href="https://ftc-events.firstinspires.org/2024/AUINQ/awards">Design Award</a>
+            , a huge recognition of our team’s creativity, engineering process, and commitment to professional design principles. It was 
+            a proud moment 
+            <a href="https://www.youtube.com/live/feez2j_CD3Y">streamed live</a> 
+            for the world to see, and one we won’t soon forget.
+          </p>
+          </div>
+        </section>
+  </main>
+
+  <div class="sidebar" id="sidebar">
+    <div class="X">
+      <a class="sidebar-x" onclick="toggleSidebar()">X</a>
+    </div>
+    <a href="index.html"><img src="logo.png" alt="Team Sheldon Logo" class="logo"></a>
+    <a href="index.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-home"></i> Home</a>
+    <a href="our-team.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-people-group"></i> Our Team</a>
+    <a href="sponsors.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-handshake"></i> Our Sponsors</a>
+    <a href="achievements.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-trophy"></i> Our Achievements</a>
+    <a href="robots.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-robot"></i> Robots</a>
+  </div>
+
+  <footer>
+    <div class="columns">
+        <div class="column">
+          <div class="column-content">
+            <div class="column-content-h2">
+              <h2>Sitemap</h2>
+            </div>
+            <div class="column-content-p">
+              <a href="index.html"class="column-content-p-2"><i class="fas fa-home"></i> Home</a>
+              <a href="our-team.html"class="column-content-p-2"><i class="fas fa-people-group"></i> Our Team</a>
+              <a href="sponsors.html"class="column-content-p-2"><i class="fas fa-handshake"></i> Our Sponsors</a>
+              <a href="achievements.html"class="column-content-p-2"><i class="fas fa-trophy"></i> Our Achievements</a>
+              <a href="robots.html"class="column-content-p-2"><i class="fas fa-robot"></i> Robots</a>
+              <a href="contact-us.html"class="column-content-p-2"><i class="fas fa-envelope"></i> Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="footer-credit">©2024–2025 Sheldon College (Team-sheldon)</p>
+  </footer>
+  <script>
+  function toggleSidebar() {
+    document.getElementById('sidebar')
+    document.getElementById('sidebar').classList.toggle('open');
+    }
+</script>
+</body>
+</html>

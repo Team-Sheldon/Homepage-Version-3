@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Sheldon</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+    }
+
+    header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #00205b;
+      color: white;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .team-name {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+
+    .contact-link {
+      position: fixed;
+      Right: 120px;
+      top: 20px;
+      font-size: 1em;
+      text-decoration: none;
+      color: white;
+    }
+
+    .burger-menu {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000000;
+
+    }
+
+    .burger-icon {
+      background-color: #00205b;
+      color: white;
+      border: none;
+      padding: 1px 15px;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 100vh;
+      background-color: #00205b;
+      color: white;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 999;
+      border-bottom-left-radius: 0.75rem;
+      overflow-y: auto;
+    }
+
+    .sidebar.open {
+      position: fixed;
+      transform: translateX(0);
+      z-index: 999;
+    }
+
+    .sidebar-x {
+      text-align: right;
+      height: auto;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 0px;
+    }
+
+    .sidebar .logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      height: 60px;
+      border-radius: 8px;
+      margin-top: 0px;
+    }
+
+    .sidebar-a {
+      margin: 15px 0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 40px;
+      text-align: center;
+    }
+
+    section {
+      padding: 40px;
+      border-top: 1px solid #ccc;
+      text-align: center;
+    }
+    
+    footer {
+      background-color: #f0f0f0;
+      text-align: center;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
+      font-size: 0.9em;
+      color: #555;
+      border-top: 1px solid #ccc;
+    }
+
+    .title {
+      margin: 50px 100px;
+      font-size: 3em;
+      margin-bottom: 40px;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin-top: 20px;
+      color: #00205b;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 1.2em;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    
+    .grid {
+      margin: 0px 40px 0px 40px;
+    }
+    
+    .grid-1 {
+      display: flex;
+      align-items: flex-start; /* logo aligns with top of text */
+      gap: 20px; /* space between text and image */
+      flex-wrap: wrap; 
+    }
+    
+    .grid-content {
+      flex: 1;
+      min-width: 280px;
+    }
+    
+    .grid-content-p {
+      line-height: 1.6;
+    }
+    
+    .grid-img {
+      max-width: 220px;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 20px;
+      margin-right: 20px;
+      }
+
+    .columns {
+      margin-bottom: 20px 40px;
+      margin-left: 20px 40px;
+      margin-right: 20px 40px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    
+    .column {
+      display: flex;
+      align-items: flex-start; /* logo aligns with top of text */
+      gap: 20px; /* space between text and image */
+      flex-wrap: wrap; 
+    }
+    
+    .column-content {
+      flex: 1;
+      width: 100%;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    
+    .column-content-p{
+      margin: 10px;
+      display: flex;
+      flex-direction: list;
+      flex-wrap: wrap;
+      gap: 20px;
+      line-height: 1.6;
+      justify-content: center;
+    }
+
+    .column-content-p-1 {
+      background-color: #00205b;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .column-content-p-2 {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px;
+      color: #00205b;
+    }
+
+    .column-content-p-2:hover {
+      transform: scale(1.2);
+    }
+    
+    .column-content-p-1:hover {
+      transform: scale(1.2);
+    }
+
+    .footer-credit {
+      font-size: 1em;
+      color: #555;
+    }
+
+    .button {
+      background-color: #00205b;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-top: 20px;
+    }
+
+    .button:hover {
+      background-color: #004080;
+      transform: scale(1.05);
+    }
+
+    .Events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .Events-grid-item {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .Events-grid-item:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+
+    .Events-grid-item-image {
+      width: 75%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .Events-grid-item-empty {
+      background-color: transparent;
+      border: none;
+      pointer-events: none; /* Makes it non-interactive */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .title {
+        margin: 30px 20px;
+        font-size: 2em;
+      }
+
+      .grid {
+        margin: 0px 20px;
+      }
+
+      .grid-1 {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .grid-img {
+        max-width: 150px;
+        margin-right: 0;
+      }
+
+      .Events-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .Events-grid-item {
+        padding: 15px;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      section {
+        padding: 20px;
+      }
+
+      .columns {
+        margin: 10px 20px;
+        padding: 10px;
+      }
+
+      .column-content-p {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .sidebar {
+        width: 200px;
+        height: 100vh;
+      }
+
+      .contact-link {
+        right: 100px;
+        font-size: 0.9em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 1.5em;
+        margin: 20px 10px;
+      }
+
+      .grid {
+        margin: 0px 10px;
+      }
+
+      .grid-content {
+        min-width: 250px;
+      }
+
+      .grid-img {
+        max-width: 120px;
+      }
+
+      .Events-grid-item {
+        padding: 10px;
+      }
+
+      main {
+        padding: 10px;
+      }
+
+      section {
+        padding: 10px;
+      }
+
+      .contact-link {
+        display: none; /* Hide contact link on very small screens */
+      }
+
+      .sidebar {
+        width: 180px;
+        height: 100vh;
+      }
+
+      .burger-icon {
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+    }
+
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <a href="index.html"><img src="logo.png" alt="Team Sheldon Logo" class="logo"></a>
+      <a href="index.html"class="team-name">Team Sheldon</a>
+    </div>
+    <a href="contact-us.html" class="contact-link"><i class="fas fa-envelope"></i> Contact Us</a>
+    <div class="burger-menu">
+      <button class="burger-icon" onclick="toggleSidebar()">☰ Menu</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="title">Welcome to Team Sheldon</div>
+    <section>
+      <div class="grid">
+        <div class="grid-1">
+          <div class="grid-content">
+            <div class="grid-content-h2">
+              <h2>About Us</h2>
+            </div>
+            <div class="grid-content-p">
+              <p>
+                Team Sheldon is Sheldon College’s premier robotics team, proudly competing in FIRST Robotics (FRC & FTC). We’re a crew of passionate students who blend engineering, coding, design, and strategy to build competitive robots — and a better future. But we’re more than just machines and matches. Through outreach, innovation, and teamwork, we aim to spark a love for STEM in our community and empower the next generation of creators and problem-solvers.
+              </p>
+            </div>
+          </div>
+          <img src="logo.png" alt="Team Sheldon Logo" class="grid-img">
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="grid">
+        <div class="grid-1">
+          <img src="./Files/Images/FIRST_Vertical_RGB.png" alt="First Logo" class="grid-img">
+          <div class="grid-content">
+            <div class="grid-content-h2">
+              <h2>About First (For Inspiration and Recognition of Science and Technology)</h2>
+            </div>
+            <div class="grid-content-p">
+              <p>
+                FIRST (For Inspiration and Recognition of Science and Technology) is a global nonprofit organization that inspires young people to be science and technology leaders. Through exciting mentor-based programs, FIRST builds self-confidence, knowledge, and life skills in young people. The organization’s mission is to engage students in hands-on learning experiences that foster innovation, teamwork, and problem-solving skills.
+              </p>
+              <button class="button" onclick="window.location.href='https://www.firstaustralia.org/'">
+                FIRST Australia
+              </button>
+              <button class="button" onclick="window.location.href='https://www.firstinspires.org/'">
+                FIRST International
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>Upcoming Events</h2>
+      <div class="Events-grid">
+        <a href="" class="Events-grid-item-empty">
+          <h3> </h3>
+        </a>
+        <a href="https://futureroboticsalliance.org" class="Events-grid-item">
+          <img src="./Files/Images/MRT 2025.png" alt="MRT 2025 Logo" class="Events-grid-item-image">
+          <h3>Melbourne Robotics Tournament - 2025</h3>
+        </a>
+        <a href="" class="Events-grid-item-empty">
+          <h3> </h3>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div class="sidebar" id="sidebar">
+    <div class="X">
+      <a class="sidebar-x" onclick="toggleSidebar()">X</a>
+    </div>
+    <a href="index.html"><img src="logo.png" alt="Team Sheldon Logo" class="logo"></a>
+    <a href="our-team.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-people-group"></i> Our Team</a>
+    <a href="sponsors.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-handshake"></i> Our Sponsors</a>
+    <a href="achievements.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-trophy"></i> Our Achievements</a>
+    <a href="robots.html" class="sidebar-a" onclick="toggleSidebar()"><i class="fas fa-robot"></i> Robots</a>
+  </div>
+
+  <footer>
+    <div class="columns">
+        <div class="column">
+          <div class="column-content">
+            <div class="column-content-h2">
+              <h2>Sitemap</h2>
+            </div>
+            <div class="column-content-p">
+              <a href="index.html"class="column-content-p-2"><i class="fas fa-home"></i> Home</a>
+              <a href="our-team.html"class="column-content-p-2"><i class="fas fa-people-group"></i> Our Team</a>
+              <a href="sponsors.html"class="column-content-p-2"><i class="fas fa-handshake"></i> Our Sponsors</a>
+              <a href="achievements.html"class="column-content-p-2"><i class="fas fa-trophy"></i> Our Achievements</a>
+              <a href="robots.html"class="column-content-p-2"><i class="fas fa-robot"></i> Robots</a>
+              <a href="contact-us.html"class="column-content-p-2"><i class="fas fa-envelope"></i> Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="footer-credit">©2024–2025 Sheldon College (Team-sheldon)</p>
+  </footer>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

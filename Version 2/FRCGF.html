@@ -1,0 +1,2331 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FRC Game Fields - Team Sheldon</title>
+  <meta name="description" content="Explore FIRST Robotics Competition game fields from different years. View field layouts, game rules, and robot challenges for each season.">
+  <link rel="icon" href="logo.png" type="image/png">
+  
+  <!-- Meta Tags -->
+  <meta name="keywords" content="FRC Game Field, FIRST Robotics, FRC 2025, game rules, field layout, robot challenges">
+  <meta name="author" content="Team Sheldon">
+  <meta property="og:title" content="FRC Game Fields - Team Sheldon">
+  <meta property="og:description" content="Explore FIRST Robotics Competition game fields and challenges from different years.">
+  <meta property="og:image" content="logo.png">
+  <meta property="og:url" content="https://teamsheldon.tech/FRCGR.html">
+
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="logo.png" as="image">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://www.firstaustralia.org">
+  <link rel="dns-prefetch" href="https://www.firstinspires.org">
+  <style>
+    :root {
+      --primary-color: #001a4d;
+      --secondary-color: #002b66;
+      --accent-color: #1565c0;
+      --success-color: #2e7d32;
+      --warning-color: #f57c00;
+      --error-color: #d32f2f;
+      --text-color: #0d0d0d;
+      --text-light: #333333;
+      --text-muted: #555555;
+      --light-gray: #f8f8f8;
+      --medium-gray: #e8e8e8;
+      --border-color: #b0b0b0;
+      --white: #ffffff;
+      --black: #000000;
+      --bg-primary: #fdfdfd;
+      --bg-secondary: #f5f5f5;
+      --transition-speed: 0.3s;
+      --border-radius: 8px;
+      --border-radius-lg: 16px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.18);
+      --hover-shadow: 0 8px 20px rgba(0, 26, 77, 0.25);
+      --intense-shadow: 0 20px 40px rgba(0, 26, 77, 0.35);
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 1.875rem;
+      --font-size-4xl: 2.25rem;
+      --font-size-5xl: 3rem;
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --spacing-2xl: 3rem;
+      --spacing-3xl: 4rem;
+    }
+
+    /* Enhanced Dark Mode Variables with Maximum Contrast */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text-color: #f5f5f5;
+        --text-light: #d0d0d0;
+        --text-muted: #a8a8a8;
+        --light-gray: #2c2c2c;
+        --medium-gray: #404040;
+        --border-color: #606060;
+        --white: #1a1a1a;
+        --bg-primary: #1f1f1f;
+        --bg-secondary: #2a2a2a;
+        --primary-color: #4d94ff;
+        --secondary-color: #3d7ddb;
+        --accent-color: #42a5f5;
+        --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+        --hover-shadow: 0 8px 20px rgba(77, 148, 255, 0.2);
+        --intense-shadow: 0 20px 40px rgba(77, 148, 255, 0.3);
+      }
+    }
+
+    /* Advanced Animations */
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes slideInLeft {
+      from { transform: translateX(-100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideInUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes slideInDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(30, 136, 229, 0.3); }
+      50% { box-shadow: 0 0 30px rgba(30, 136, 229, 0.6); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    @keyframes typewriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* High Contrast Mode for Maximum Accessibility */
+    .high-contrast-mode {
+      --text-color: #000000;
+      --text-light: #1a1a1a;
+      --text-muted: #333333;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f8f8;
+      --white: #ffffff;
+      --primary-color: #000066;
+      --secondary-color: #000099;
+      --accent-color: #0066cc;
+      --border-color: #666666;
+    }
+
+    .high-contrast-mode h1,
+    .high-contrast-mode h2,
+    .high-contrast-mode h3,
+    .high-contrast-mode h4,
+    .high-contrast-mode h5,
+    .high-contrast-mode h6 {
+      color: #000000;
+      font-weight: 700;
+      text-shadow: none;
+    }
+
+    .high-contrast-mode p,
+    .high-contrast-mode span,
+    .high-contrast-mode div {
+      color: #000000;
+      font-weight: 500;
+      text-shadow: none;
+    }
+
+    .high-contrast-mode .button {
+      background-color: #000066;
+      color: #ffffff;
+      border: 2px solid #000000;
+      font-weight: 700;
+    }
+
+    .high-contrast-mode .button:hover {
+      background-color: #000099;
+      border-color: #333333;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--white);
+      color: var(--text-color);
+      line-height: 1.6;
+      overflow-x: hidden;
+      font-weight: 450;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Enhanced Text Contrast with Maximum Readability */
+    .text-high-contrast {
+      color: var(--text-color);
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-medium-contrast {
+      color: var(--text-light);
+      font-weight: 500;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    }
+
+    .text-low-contrast {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Ultra-high contrast for critical text */
+    .text-ultra-contrast {
+      color: var(--black);
+      font-weight: 700;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Enhanced readability for body text */
+    .text-readable {
+      color: var(--text-color);
+      font-weight: 450;
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+    }
+
+    /* Particle Background Animation */
+    .particle-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: floatParticle 20s linear infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+
+
+    /* Advanced Scroll Progress Bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--primary-color));
+      z-index: 1001;
+      transition: width 0.1s ease;
+      box-shadow: 0 2px 10px rgba(30, 136, 229, 0.4);
+    }
+
+    .scroll-progress::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Advanced Floating Elements */
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .floating-shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-shape:nth-child(1) {
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .floating-shape:nth-child(2) {
+      top: 20%;
+      right: 15%;
+      animation-delay: -2s;
+    }
+
+    .floating-shape:nth-child(3) {
+      bottom: 15%;
+      left: 20%;
+      animation-delay: -4s;
+    }
+
+    .floating-shape:nth-child(4) {
+      bottom: 30%;
+      right: 10%;
+      animation-delay: -1s;
+    }
+
+    .floating-shape:nth-child(5) {
+      top: 50%;
+      left: 5%;
+      animation-delay: -3s;
+    }
+
+    .floating-shape:nth-child(6) {
+      top: 60%;
+      right: 5%;
+      animation-delay: -5s;
+    }
+
+    /* Enhanced Header with Maximum Contrast */
+    header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: rgba(0, 26, 77, 0.99);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--white);
+      z-index: 1000;
+      transition: all var(--transition-speed) ease;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .header-scrolled {
+      background: rgba(0, 26, 77, 1);
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .logo-container:hover {
+      transform: scale(1.05);
+    }
+
+    .logo {
+      height: 40px;
+      margin-right: 10px;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .logo:hover {
+      transform: rotate(5deg);
+    }
+
+    .team-name {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+      transition: color var(--transition-speed) ease;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .team-name:hover {
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .contact-link {
+      font-size: 1em;
+      text-decoration: none;
+      color: white;
+      margin-right: 20px;
+      transition: all var(--transition-speed) ease;
+      padding: 10px 18px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .contact-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.25);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .burger-menu {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .burger-icon {
+      background-color: var(--primary-color);
+      color: var(--white);
+      border: none;
+      padding: 8px 15px;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .burger-icon:hover,
+    .burger-icon:focus {
+      background-color: var(--secondary-color);
+      outline: 2px solid var(--white);
+      outline-offset: 2px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 100vh;
+      background-color: var(--primary-color);
+      color: var(--white);
+      padding: 20px;
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 10000;
+      border-bottom-left-radius: 0.75rem;
+      overflow-y: auto;
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .sidebar-x {
+      text-align: right;
+      color: var(--white);
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      padding: 5px;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+    }
+
+    .sidebar-x:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar .logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      height: 60px;
+    }
+
+    .sidebar a[aria-label="Team Sheldon Home"] {
+      border: none;
+      outline: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar a[aria-label="Team Sheldon Home"]:hover,
+    .sidebar a[aria-label="Team Sheldon Home"]:focus {
+      border: none;
+      outline: none;
+      background: none;
+    }
+
+    .sidebar-a {
+      margin: 15px 0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 8px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      margin: 5px 0;
+    }
+
+    .sidebar button {
+      display: block;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 8px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      margin: 5px 0;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: inherit;
+      font-family: inherit;
+    }
+
+    .sidebar a:hover,
+    .sidebar a:focus,
+    .sidebar button:hover,
+    .sidebar button:focus {
+      background-color: rgba(255, 255, 255, 0.15);
+      outline: 2px solid rgba(255, 255, 255, 0.3);
+      outline-offset: 2px;
+      transform: translateX(3px);
+    }
+
+    .sidebar a[onclick]:hover,
+    .sidebar a[onclick]:focus,
+    .sidebar button[onclick]:hover,
+    .sidebar button[onclick]:focus {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .resources-submenu {
+      margin-left: 20px;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .resources-submenu.show {
+      opacity: 1;
+      max-height: 200px;
+    }
+
+    .submenu-item {
+      font-size: 0.9em;
+      padding-left: 10px;
+      border-left: 2px solid rgba(255, 255, 255, 0.3);
+      margin: 10px 0;
+    }
+
+    .submenu-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .submenu-item:focus {
+      background-color: rgba(255, 255, 255, 0.2);
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    /* Skip to main content link */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: #00205b;
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      border-radius: 4px;
+      z-index: 10000;
+      transition: top 0.3s;
+    }
+
+    .skip-link:focus {
+      top: 6px;
+    }
+
+    /* Ultra-Enhanced Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--accent-color) 100%);
+      color: white;
+      text-align: center;
+      padding: 140px 20px 100px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 60px;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.05"><polygon points="0,0 1000,100 1000,0"/></svg>');
+      background-size: cover;
+      pointer-events: none;
+    }
+
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 800;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.3s forwards;
+      background: linear-gradient(45deg, white, #e3f2fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.6s forwards;
+      font-weight: 300;
+      line-height: 1.6;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 25px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.9s forwards;
+      margin-top: 50px;
+    }
+
+    .hero-button {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+      padding: 18px 35px;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all var(--transition-speed) ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .hero-button:hover::before {
+      left: 100%;
+    }
+
+    .hero-button:hover {
+      background: white;
+      color: var(--primary-color);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      border-color: var(--accent-color);
+    }
+
+    .hero-button:active {
+      transform: translateY(-2px);
+    }
+
+    /* Advanced Scroll Indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s ease-in-out infinite;
+      color: white;
+      font-size: 1.5rem;
+      opacity: 0.8;
+    }
+
+    .scroll-indicator::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 30px;
+      background: linear-gradient(to bottom, white, transparent);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Enhanced Animations */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger-animation {
+      transition-delay: 0.1s;
+    }
+
+    .stagger-animation:nth-child(2) {
+      transition-delay: 0.2s;
+    }
+
+    .stagger-animation:nth-child(3) {
+      transition-delay: 0.3s;
+    }
+
+    .stagger-animation:nth-child(4) {
+      transition-delay: 0.4s;
+    }
+
+    main {
+      padding: 0;
+      text-align: center;
+    }
+
+    /* Enhanced Section Background Contrast */
+    section {
+      padding: 60px 40px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      position: relative;
+      background-color: var(--white);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    section:nth-child(even) {
+      background-color: var(--bg-primary);
+      box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    section:nth-child(odd) {
+      background-color: var(--white);
+      box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    /* Enhanced Section Titles with Maximum Contrast */
+    section h2 {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+      color: var(--text-color);
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      border-radius: 2px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    footer {
+      background-color: var(--bg-secondary);
+      text-align: center;
+      padding: 0 20px 10px;
+      font-size: 0.9em;
+      color: var(--text-light);
+      border-top: 2px solid var(--border-color);
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+      margin: 50px 100px;
+      font-size: 3em;
+      margin-bottom: 40px;
+      font-weight: bold;
+    }
+
+    .title h1 {
+      margin: 0;
+      font-size: inherit;
+      font-weight: inherit;
+    }
+
+    h2 {
+      font-size: 2.2em;
+      margin-top: 20px;
+      color: var(--text-color);
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      font-size: 1.4em;
+      color: var(--text-light);
+      margin-bottom: 30px;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Enhanced Paragraph Styling with Maximum Contrast */
+    p {
+      font-size: 1.1em;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto 30px;
+      color: var(--text-color);
+      font-weight: 450;
+      letter-spacing: 0.01em;
+    }
+
+    /* Strong contrast for important text */
+    .text-emphasis {
+      color: var(--black);
+      font-weight: 700;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Section introductions with maximum contrast */
+    section > p {
+      color: var(--text-color);
+      font-weight: 500;
+      font-size: 1.15em;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Enhanced readability for descriptive text */
+    .description-text {
+      color: var(--text-light);
+      font-weight: 450;
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+    }
+    
+    .grid {
+      margin: 0 40px;
+    }
+    
+    .grid-1 {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap; 
+    }
+    
+    .grid-content {
+      flex: 1;
+      min-width: 280px;
+    }
+    
+    .grid-content-p {
+      line-height: 1.6;
+    }
+    
+    .grid-img {
+      max-width: 220px;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 20px;
+      margin-right: 20px;
+    }
+
+    .columns {
+      margin: 20px 40px;
+      padding: 0 20px;
+    }
+    
+    .column {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap; 
+    }
+    
+    .column-content {
+      flex: 1;
+      width: 100%;
+      padding: 0 20px;
+    }
+    
+    .column-content-p {
+      margin: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      line-height: 1.6;
+      justify-content: center;
+    }
+
+    .column-content-p-1,
+    .column-content-p-2 {
+      border: 1px solid #ddd;
+      cursor: pointer;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    .column-content-p-1 {
+      background-color: var(--primary-color);
+      color: var(--white);
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .column-content-p-2 {
+      background-color: var(--bg-primary);
+      color: var(--text-color);
+      font-weight: 600;
+      border: 2px solid var(--border-color);
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    }
+
+    .column-content-p-1:hover,
+    .column-content-p-2:hover {
+      transform: scale(1.2);
+    }
+
+    .column-content-p-1:focus,
+    .column-content-p-2:focus {
+      transform: scale(1.2);
+      outline: 2px solid #00205b;
+      outline-offset: 2px;
+    }
+
+    .column-content-p-1:active,
+    .column-content-p-2:active {
+      transform: scale(1.1);
+    }
+
+    .footer-credit {
+      font-size: 1em;
+      color: var(--text-light);
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .button {
+      background-color: var(--primary-color);
+      color: var(--white);
+      border: none;
+      padding: 15px 30px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 1.05em;
+      font-weight: 700;
+      margin-top: 20px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 26, 77, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .button:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 26, 77, 0.5);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .button:focus {
+      background-color: var(--secondary-color);
+      outline: 3px solid rgba(255, 255, 255, 0.9);
+      outline-offset: 3px;
+    }
+
+    .button:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 26, 77, 0.4);
+    }
+
+    /* Removed unused Events-grid styles to optimize page */
+
+    /* Enhanced Stats Section */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .stat-item {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 40px 25px;
+      border-radius: 16px;
+      text-align: center;
+      transition: all var(--transition-speed) ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      transform: scale(0);
+      transition: transform 0.5s ease;
+    }
+
+    .stat-item:hover::before {
+      transform: scale(1);
+    }
+
+    .stat-item:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 32, 91, 0.4);
+    }
+
+    .stat-number {
+      font-size: 3em;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: var(--white);
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-label {
+      font-size: 1.1em;
+      color: #e0e0e0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Removed unused CTA section styles to optimize page */
+
+    /* Ultra-Enhanced Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 35px;
+      margin-top: 50px;
+      perspective: 1000px;
+    }
+
+    .skill-item {
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      padding: 35px;
+      text-align: center;
+      transition: all var(--transition-speed) ease;
+      border-top: 4px solid var(--primary-color);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      cursor: default; /* Default cursor - not clickable */
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Only make clickable items have pointer cursor */
+    .skill-item.clickable-event {
+      cursor: pointer;
+    }
+
+    .skill-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .skill-item:hover::before {
+      left: 100%;
+    }
+
+    .skill-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, transparent, rgba(25, 118, 210, 0.08), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .skill-item:hover::after {
+      opacity: 1;
+    }
+
+    .skill-item:hover {
+      transform: translateY(-12px) rotateX(5deg);
+      box-shadow: 0 20px 40px rgba(0, 41, 102, 0.25);
+      border-top-color: var(--accent-color);
+    }
+
+    .skill-item:active {
+      transform: translateY(-8px) rotateX(2deg);
+    }
+
+    .skill-icon {
+      font-size: 3.5em;
+      color: var(--primary-color);
+      margin-bottom: 25px;
+      transition: all var(--transition-speed) ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .skill-item:hover .skill-icon {
+      color: var(--accent-color);
+      transform: scale(1.2) rotateY(10deg);
+      animation: pulse 1s ease-in-out;
+    }
+
+    .skill-title {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 18px;
+      transition: all var(--transition-speed) ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .skill-item:hover .skill-title {
+      color: var(--primary-color);
+      transform: scale(1.05);
+    }
+
+    .skill-description {
+      font-size: 1.05em;
+      color: var(--text-light);
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+      transition: color var(--transition-speed) ease;
+      font-weight: 400;
+    }
+
+    .skill-item:hover .skill-description {
+      color: var(--text-color);
+    }
+
+    /* Enhanced Featured Skill Items */
+    .skill-item.featured {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: var(--white);
+      border-top: 4px solid var(--accent-color);
+      box-shadow: 0 5px 20px rgba(0, 41, 102, 0.4);
+    }
+
+    .skill-item.featured .skill-icon,
+    .skill-item.featured .skill-title {
+      color: var(--white);
+    }
+
+    .skill-item.featured .skill-description {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .skill-item.featured:hover {
+      transform: translateY(-12px) rotateX(5deg) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0, 41, 102, 0.5);
+    }
+
+    .skill-item.featured:hover .skill-icon,
+    .skill-item.featured:hover .skill-title {
+      color: #e3f2fd;
+    }
+
+    /* Team Values Section */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .value-item {
+      background: linear-gradient(135deg, #00205b 0%, #004080 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .value-item::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      transform: scale(0);
+      transition: transform 0.5s ease;
+    }
+
+    .value-item:hover::before {
+      transform: scale(1);
+    }
+
+    .value-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 32, 91, 0.3);
+    }
+
+    .value-icon {
+      font-size: 2.8em;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .value-title {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .value-description {
+      font-size: 1em;
+      line-height: 1.6;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Mobile-first responsive improvements */
+    @media (max-width: 768px) {
+      /* Speed up all animations for better mobile performance */
+      * {
+        animation-duration: 0.2s !important;
+        transition-duration: 0.2s !important;
+      }
+      
+      /* Disable floating elements for better mobile performance */
+      .floating-elements {
+        display: none;
+      }
+      
+      /* Disable particle background on mobile for performance */
+      .particle-background {
+        display: none;
+      }
+      
+      /* Reduce hero section padding on mobile */
+      .hero-section {
+        padding: 80px 20px 60px;
+        min-height: 60vh;
+      }
+      
+      .title {
+        margin: 30px 20px;
+        font-size: 2em;
+      }
+
+      .contact-link {
+        display: none;
+      }
+
+      .grid {
+        margin: 0 20px;
+      }
+
+      .grid-1 {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .grid-img {
+        max-width: 150px;
+        margin-right: 0;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      section {
+        padding: 30px 15px;
+      }
+
+      .columns {
+        margin: 10px 20px;
+        padding: 0 10px;
+      }
+
+      .column-content-p {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .sidebar {
+        width: 200px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .stat-item {
+        padding: 25px 15px;
+      }
+
+      .stat-number {
+        font-size: 2.2em;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .skill-item {
+        padding: 25px 20px;
+      }
+
+      .skill-icon {
+        font-size: 2.5em;
+      }
+
+      .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .value-item {
+        padding: 25px;
+      }
+
+      .value-icon {
+        font-size: 2.3em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      /* Ultra-mobile optimizations */
+      .hero-section {
+        padding: 60px 15px 40px;
+        min-height: 50vh;
+      }
+      
+      .title {
+        font-size: 1.5em;
+        margin: 20px 10px;
+      }
+
+      .grid {
+        margin: 0 10px;
+      }
+
+      .grid-content {
+        min-width: 250px;
+      }
+
+      .grid-img {
+        max-width: 120px;
+      }
+
+      main {
+        padding: 15px 10px;
+      }
+
+      section {
+        padding: 20px 10px;
+      }
+
+      .contact-link {
+        display: none;
+      }
+
+      .sidebar {
+        width: 180px;
+      }
+
+      .burger-icon {
+        padding: 8px 12px;
+        font-size: 0.9em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .stat-item {
+        padding: 20px 15px;
+      }
+
+      .stat-number {
+        font-size: 1.8em;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .skill-item {
+        padding: 20px 15px;
+      }
+
+      .skill-icon {
+        font-size: 2em;
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .value-item {
+        padding: 25px 20px;
+      }
+
+      .value-icon {
+        font-size: 2.2em;
+      }
+    }
+
+    /* Game Fields Grid Styles */
+    .game-fields-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+
+    .game-field-card {
+      background: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+      border: 1px solid var(--medium-gray);
+    }
+
+    .game-field-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .field-image {
+      width: 100%;
+      height: 250px;
+      overflow: hidden;
+      position: relative;
+      object-fit: contain;
+    }
+
+    .field-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-speed);
+    }
+
+    .game-field-card:hover .field-image img {
+      transform: scale(1.05);
+    }
+
+    .field-info {
+      padding: 30px;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .field-info h3 {
+      color: var(--primary-color);
+      font-size: 1.8em;
+      font-weight: 700;
+      margin: 0 0 20px 0;
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      letter-spacing: 0.5px;
+    }
+
+    .field-info p {
+      color: var(--text-color);
+      font-size: 1.05em;
+      line-height: 1.7;
+      margin: 0 0 25px 0;
+      text-align: center;
+      font-weight: 450;
+      max-width: 550px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 25px;
+    }
+
+    .field-button {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: var(--white);
+      text-decoration: none;
+      padding: 15px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1.05em;
+      text-align: center;
+      max-width: 250px;
+      width: 100%;
+      box-sizing: border-box;
+      transition: all var(--transition-speed);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin: 10px auto 0 auto;
+      box-shadow: 0 4px 12px rgba(0, 32, 91, 0.3);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .field-button:hover {
+      background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .game-fields-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 15px;
+      }
+      
+      .field-info {
+        padding: 20px;
+      }
+      
+      .field-image {
+        height: 200px;
+      }
+    }
+
+</style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Particle Background -->
+  <div class="particle-background" id="particleBackground"></div>
+  
+  <!-- Floating Elements - Reduced for mobile performance -->
+  <div class="floating-elements">
+    <div class="floating-shape">
+      <i class="fas fa-robot" style="font-size: 50px; color: var(--primary-color);"></i>
+    </div>
+    <div class="floating-shape">
+      <i class="fas fa-lightbulb" style="font-size: 35px; color: var(--secondary-color);"></i>
+    </div>
+    <div class="floating-shape">
+      <i class="fas fa-trophy" style="font-size: 40px; color: var(--secondary-color);"></i>
+    </div>
+  </div>
+  
+  <!-- Advanced Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+  
+  <header role="banner" id="header">
+    <div class="logo-container">
+      <a href="index.html" aria-label="Team Sheldon Home">
+        <img src="logo.png" alt="Team Sheldon Logo" class="logo">
+      </a>
+      <a href="index.html" class="team-name" aria-label="Team Sheldon Home">Team Sheldon</a>
+    </div>
+    <div style="display: flex; align-items: center;">
+      <a href="contact-us.html" class="contact-link" aria-label="Contact Us">
+        <i class="fas fa-envelope" aria-hidden="true"></i> Contact Us
+      </a>
+      <div class="burger-menu">
+        <button class="burger-icon" onclick="toggleSidebar()" aria-expanded="false" aria-controls="sidebar" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars" aria-hidden="true"></i> Menu
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Ultra-Enhanced Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">FRC Game Fields</h1>
+      <p class="hero-subtitle">
+        Explore FIRST Robotics Competition game fields from different years. Each season brings unique challenges, field layouts, and strategic opportunities that test teams' engineering and programming skills.
+      </p>
+      <div class="hero-buttons">
+        <a href="#game-fields" class="hero-button">Explore Fields</a>
+        <a href="index.html" class="hero-button">Back to Home</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
+
+  <main id="main-content" role="main">
+    <section id="game-fields" class="animate-on-scroll">
+      <h2>FRC Game Fields by Year</h2>
+      <p>Select a competition year to explore the unique game field, rules, and challenges that teams faced during that season. Each year brings innovative game mechanics and field designs that test different aspects of robot engineering and strategy.</p>
+      <div class="game-fields-grid">
+        <div class="game-field-card">
+          <div class="field-image-container" style="display: flex; justify-content: center; align-items: center; padding: 30px 20px 0px;">
+            <img src="./Files/Images/2025 FRC Field.png" alt="2025 FRC Field" style="width: 60%; max-width: 400px; height: auto; border-radius: 12px; object-fit: contain; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+          </div>
+          <div class="field-info">
+            <h3>2025 - FRC Field</h3>
+            <p>The 2025 FRC game Reefscape features an ocean-themed field with alliance zones at each end and a central reef area. Robots collect coral (PVC pipes) and algae (foam balls) to score in Coral Stations and the Processor. The centre truss, called the Barge, holds Cages for the endgame climb. AprilTags support autonomous routines, and smart movement, scoring, and climbing are key to success in this dynamic field.</p>
+            <a href="2025-FRC.html" class="field-button" target="_blank">View Field Layout</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="skills" class="animate-on-scroll">
+      <h2>Skills & Learning</h2>
+      <p>At Team Sheldon, you won’t just build robots — you’ll build an impressive skill set that’ll carry you far beyond the competition arena.</p>
+      <div class="skills-grid">
+        <div class="skill-item stagger-animation">
+          <div class="skill-icon">
+            <i class="fas fa-code" aria-hidden="true"></i>
+          </div>
+          <div class="skill-title">Advanced Programming</div>
+          <div class="skill-description">
+            Team members develop strong coding skills in languages like Java, Python, and C++, using professional-grade robotics frameworks. You'll get hands-on experience programming autonomous functions, integrating artificial intelligence, and crafting robust strategies for real-time problem-solving on the field.
+          </div>
+        </div>
+        <div class="skill-item stagger-animation">
+          <div class="skill-icon">
+            <i class="fas fa-cogs" aria-hidden="true"></i>
+          </div>
+          <div class="skill-title">Mechanical Engineering</div>
+          <div class="skill-description">
+            From 3D modelling to full-scale construction, you'll learn how to design, prototype, and build complex mechanical systems. Using tools like CAD software, CNC routers, and other fabrication equipment, you'll explore materials science, understand how drivetrains and gearboxes work, and gain practical experience in mechanical design and assembly.
+          </div>
+        </div>
+        <div class="skill-item stagger-animation">
+          <div class="skill-icon">
+            <i class="fas fa-users" aria-hidden="true"></i>
+          </div>
+          <div class="skill-title">Leadership Excellence</div>
+          <div class="skill-description">
+            In Team Sheldon, leadership isn't just a title it's a skill. You'll learn to lead projects, manage time and teams, and coordinate complex tasks under pressure. From mentoring newer members to running sub-teams and refining match strategy, leadership here is about inspiring others and delivering results.
+          </div>
+        </div>
+        <div class="skill-item stagger-animation">
+          <div class="skill-icon">
+            <i class="fas fa-handshake" aria-hidden="true"></i>
+          </div>
+          <div class="skill-title">Business Acumen</div>
+          <div class="skill-description">
+            You'll master the art of pitching, sponsorship acquisition, and budget management. Whether it's writing sponsor emails, maintaining professional relationships, or presenting our team at public events, you'll gain real-world business skills that turn STEM passion into long-term success.
+          </div>
+        </div>
+        <div class="skill-item stagger-animation">
+          <div class="skill-icon">
+            <i class="fas fa-microphone" aria-hidden="true"></i>
+          </div>
+          <div class="skill-title">Communication Mastery</div>
+          <div class="skill-description">
+            From high-pressure match calls to technical presentations, you'll become a confident communicator. You'll practise public speaking, explain complex ideas clearly, and work effectively with a team, learning how to adapt your voice depending on the audience” whether it's judges, sponsors, or students at an outreach event.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="X">
+      <button class="sidebar-x" onclick="toggleSidebar()" aria-label="Close navigation menu">✕</button>
+    </div>
+    <a href="index.html" aria-label="Team Sheldon Home">
+      <img src="logo.png" alt="Team Sheldon Logo" class="logo">
+    </a>
+    <a href="our-team.html" class="sidebar-a" onclick="toggleSidebar()">
+      <i class="fas fa-people-group" aria-hidden="true"></i> Our Team
+    </a>
+    <a href="sponsors.html" class="sidebar-a" onclick="toggleSidebar()">
+      <i class="fas fa-handshake" aria-hidden="true"></i> Our Sponsors
+    </a>
+    <a href="achievements.html" class="sidebar-a" onclick="toggleSidebar()">
+      <i class="fas fa-trophy" aria-hidden="true"></i> Our Achievements
+    </a>
+    <a href="robots.html" class="sidebar-a" onclick="toggleSidebar()">
+      <i class="fas fa-robot" aria-hidden="true"></i> Robots
+    </a>
+    <button class="sidebar-a" onclick="toggleResources()" aria-expanded="false" aria-controls="resourcesSubMenu">
+      <i class="fas fa-book" aria-hidden="true"></i> Resources
+    </button>
+    
+    <!-- Resources Sub-menu -->
+    <div id="resourcesSubMenu" class="resources-submenu" style="display: none;" role="region" aria-label="Resources submenu">
+      <a href="FRCGF.html" class="sidebar-a submenu-item" onclick="toggleSidebar()">
+        <i class="fas fa-map" aria-hidden="true"></i> FRC Game Field
+      </a>
+    </div>
+  </nav>
+
+  <footer role="contentinfo">
+    <div class="columns">
+        <div class="column">
+          <div class="column-content">
+            <div class="column-content-h2">
+              <h2>Sitemap</h2>
+            </div>
+            <nav class="column-content-p" role="navigation" aria-label="Footer navigation">
+              <a href="index.html" class="column-content-p-2" aria-label="Home page">
+                <i class="fas fa-home" aria-hidden="true"></i> Home
+              </a>
+              <a href="our-team.html" class="column-content-p-2" aria-label="Our team page">
+                <i class="fas fa-people-group" aria-hidden="true"></i> Our Team
+              </a>
+              <a href="sponsors.html" class="column-content-p-2" aria-label="Our sponsors page">
+                <i class="fas fa-handshake" aria-hidden="true"></i> Our Sponsors
+              </a>
+              <a href="achievements.html" class="column-content-p-2" aria-label="Our achievements page">
+                <i class="fas fa-trophy" aria-hidden="true"></i> Our Achievements
+              </a>
+              <a href="robots.html" class="column-content-p-2" aria-label="Our robots page">
+                <i class="fas fa-robot" aria-hidden="true"></i> Robots
+              </a>
+              <a href="contact-us.html" class="column-content-p-2" aria-label="Contact us page">
+                <i class="fas fa-envelope" aria-hidden="true"></i> Contact Us
+              </a>
+              <a href="FRCGF.html" class="column-content-p-2" aria-label="FRC Game Field resource">
+                <i class="fas fa-map" aria-hidden="true"></i> FRC Game Field
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="footer-credit">©2024-2025 Sheldon College (Team-sheldon)</p>
+  </footer>
+
+  <script>
+    // ===== CONTENT VARIABLES - EASY TO EDIT =====
+    
+    // EVENTS SECTION CONTENT
+    const eventsContent = {
+      title: "Upcoming Events",
+      subtitle: "Stay updated with our latest competitions and robotics events throughout the year.",
+      events: [
+        {
+          image: "./Files/Images/MRT 2025.png",
+          title: "Melbourne Robotics Tournament - 2025",
+          description: "Our next major competition event where we'll compete against teams from across Australia.",
+          buttonLink: "https://futureroboticsalliance.org"
+        },
+        {
+          icon: "fas fa-users",
+          title: "Team Meetings",
+          description: "Weekly team sessions focus on building skills, refining robots, and preparing presentations, outreach, and media."
+        }
+      ]
+    };
+
+    // OUR IMPACT SECTION CONTENT
+    const impactContent = {
+      title: "Our Impact",
+      stats: [
+        {
+          number: "5+",
+          label: "Years Active"
+        },
+        {
+          number: "5",
+          label: "Seasons Attended"
+        },
+        {
+          number: "1",
+          label: "Award Won"
+        },
+        {
+          number: "8",
+          label: "Team Members"
+        }
+      ]
+    };
+
+    // ===== END CONTENT VARIABLES =====
+
+    // Advanced Website Interactions & Animations - Optimized for mobile
+    let particleCount = 0;
+    const maxParticles = window.innerWidth < 768 ? 20 : 50; // Reduced particles on mobile
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize dynamic content
+      initializeEventsSection();
+      initializeImpactSection();
+      
+      // Initialize all advanced features with mobile optimization
+      initScrollAnimations();
+      initScrollProgress();
+      initFloatingActionButton();
+      initHeaderScrollEffect();
+      
+      // Only initialize particles on larger screens for performance
+      if (window.innerWidth >= 768) {
+        initParticleBackground();
+      }
+      
+      initAdvancedInteractions();
+      initKeyboardShortcuts();
+      
+      // Initialize intersection observer for performance
+      initPerformanceObserver();
+    });
+
+    // DYNAMIC CONTENT FUNCTIONS
+    function initializeEventsSection() {
+      const eventsSection = document.getElementById('events-section');
+      if (!eventsSection) return;
+      
+      let eventsHTML = `
+        <h2>${eventsContent.title}</h2>
+        <p>${eventsContent.subtitle}</p>
+        <div class="skills-grid">
+      `;
+      
+      eventsContent.events.forEach(event => {
+        eventsHTML += `
+          <div class="skill-item${event.buttonLink ? ' clickable-event' : ''}" ${event.buttonLink ? `onclick="window.location.href='${event.buttonLink}'" style="cursor: pointer;"` : ''}>
+            ${event.image ? `
+              <div class="skill-icon">
+                <img src="${event.image}" alt="${event.title}" style="width: 75%; height: auto; object-fit: cover;border: 5px solid; border-radius: 8px; border-color: var(--primary-color);">
+              </div>
+            ` : `
+              <div class="skill-icon">
+                <i class="${event.icon}" aria-hidden="true"></i>
+              </div>
+            `}
+            <div class="skill-title">${event.title}</div>
+            <div class="skill-description">
+              ${event.description}
+            </div>
+          </div>
+        `;
+      });
+      
+      eventsHTML += `</div>`;
+      eventsSection.innerHTML = eventsHTML;
+    }
+
+    function initializeImpactSection() {
+      const impactSection = document.getElementById('impact-section');
+      if (!impactSection) return;
+      
+      let impactHTML = `
+        <h2>${impactContent.title}</h2>
+        <div class="stats-grid">
+      `;
+      
+      impactContent.stats.forEach(stat => {
+        impactHTML += `
+          <div class="stat-item stagger-animation">
+            <div class="stat-number">${stat.number}</div>
+            <div class="stat-label">${stat.label}</div>
+          </div>
+        `;
+      });
+      
+      impactHTML += `</div>`;
+      impactSection.innerHTML = impactHTML;
+    }
+
+    // Advanced Particle Background System
+    function initParticleBackground() {
+      const particleBackground = document.getElementById('particleBackground');
+      
+      function createParticle() {
+        if (particleCount >= maxParticles) return;
+        
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        
+        particleBackground.appendChild(particle);
+        particleCount++;
+        
+        particle.addEventListener('animationend', () => {
+          particle.remove();
+          particleCount--;
+        });
+      }
+      
+      // Create particles periodically
+      setInterval(createParticle, 1000);
+      
+      // Create initial particles
+      for (let i = 0; i < 10; i++) {
+        setTimeout(createParticle, i * 200);
+      }
+    }
+
+    // Enhanced Scroll Progress with Shimmer Effect
+    function initScrollProgress() {
+      const scrollProgress = document.getElementById('scrollProgress');
+      
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        scrollProgress.style.width = scrollPercent + '%';
+        
+        // Add pulse effect at milestones
+        if (scrollPercent > 0 && scrollPercent % 25 < 1) {
+          scrollProgress.style.animation = 'glow 0.5s ease-in-out';
+          setTimeout(() => {
+            scrollProgress.style.animation = '';
+          }, 500);
+        }
+      });
+    }
+
+    // Advanced Multi-FAB System
+    function initFloatingActionButton() {
+      const mainFAB = document.getElementById('mainFAB');
+      const fabContainer = document.getElementById('fabContainer');
+      
+      window.addEventListener('scroll', () => {
+        // Scroll functionality without FAB
+      });
+    }
+
+    // Smooth Scroll to Section
+    function scrollToSection(sectionId) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+        
+        // Show success notification
+        const sectionNames = {
+          'about': 'About Us',
+          'skills': 'Skills & Learning',
+          'values': 'Our Values'
+        };
+        
+        showNotification(`ðŸ  Navigated to ${sectionNames[sectionId]} section! ðŸ“`, 'success');
+      }
+    }
+
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      showNotification('ðŸ  Back to top of homepage! â¬†ï¸', 'success');
+    }
+
+    // Advanced Header Scroll Effect
+    function initHeaderScrollEffect() {
+      const header = document.getElementById('header');
+      let lastScrollTop = 0;
+      
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset;
+        
+        if (scrollTop > 50) {
+          header.classList.add('header-scrolled');
+        } else {
+          header.classList.remove('header-scrolled');
+        }
+        
+        // Hide header when scrolling down, show when scrolling up
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+          header.style.transform = 'translateY(-100%)';
+        } else {
+          header.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollTop = scrollTop;
+      });
+    }
+
+    // Advanced Scroll Animations with Stagger Effect
+    function initScrollAnimations() {
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            
+            // Add stagger animation to children
+            const staggerElements = entry.target.querySelectorAll('.stagger-animation');
+            staggerElements.forEach((el, index) => {
+              setTimeout(() => {
+                el.style.animation = `fadeInUp 0.6s ease ${index * 0.1}s forwards`;
+              }, index * 100);
+            });
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    // Advanced Interactions
+    function initAdvancedInteractions() {
+      // Skill item click effects - only for clickable items
+      document.querySelectorAll('.skill-item.clickable-event').forEach(item => {
+        item.addEventListener('click', function() {
+          const title = this.querySelector('.skill-title').textContent;
+          showNotification(`ðŸ”— Opening: ${title}! ðŸŒ`, 'success');
+        });
+      });
+      
+      // Non-clickable skill items should not have click effects
+      document.querySelectorAll('.skill-item:not(.clickable-event)').forEach(item => {
+        item.addEventListener('click', function() {
+          // Optional: Add a subtle animation to show it's informational only
+          this.style.animation = 'pulse 0.3s ease-in-out';
+          setTimeout(() => {
+            this.style.animation = '';
+          }, 300);
+          
+          const title = this.querySelector('.skill-title').textContent;
+          showNotification(`â„¹ï¸ ${title} - Information only`, 'info');
+        });
+      });
+      
+      // Value item hover effects
+      document.querySelectorAll('.value-item').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+          this.style.animation = 'glow 1s ease-in-out';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+          this.style.animation = '';
+        });
+      });
+      
+      // Logo click easter egg
+      document.querySelector('.logo').addEventListener('click', function() {
+        this.style.animation = 'rotate 1s ease-in-out';
+        showNotification('ðŸ  Team Sheldon Homepage rocks! ðŸŽ‰', 'success');
+        setTimeout(() => {
+          this.style.animation = '';
+        }, 1000);
+      });
+    }
+
+    // Keyboard Shortcuts
+    function initKeyboardShortcuts() {
+      document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + H: Scroll to top
+        if ((e.ctrlKey || e.metaKey) && e.key === 'h') {
+          e.preventDefault();
+          scrollToTop();
+        }
+        
+        // Number keys for quick navigation
+        if (e.key >= '1' && e.key <= '3') {
+          e.preventDefault();
+          const sections = ['about', 'skills', 'values'];
+          scrollToSection(sections[parseInt(e.key) - 1]);
+        }
+      });
+    }
+
+    // Performance Observer
+    function initPerformanceObserver() {
+      // Lazy load images
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              img.removeAttribute('data-src');
+              imageObserver.unobserve(img);
+            }
+          }
+        });
+      });
+
+      document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+      });
+    }
+
+    // Enhanced Sidebar Functions
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const burgerButton = document.querySelector('.burger-icon');
+      const isOpen = sidebar.classList.contains('open');
+      
+      sidebar.classList.toggle('open');
+      burgerButton.setAttribute('aria-expanded', !isOpen);
+      
+      // Add animation class
+      sidebar.style.animation = isOpen ? 'slideOutRight 0.3s ease' : 'slideInRight 0.3s ease';
+      
+      // Focus management
+      if (!isOpen) {
+        const firstLink = sidebar.querySelector('a');
+        if (firstLink) firstLink.focus();
+        showNotification('ðŸ“± Homepage navigation opened! ðŸ ', 'success');
+      } else {
+        burgerButton.focus();
+      }
+    }
+    
+    function toggleResources() {
+      const submenu = document.getElementById('resourcesSubMenu');
+      const resourcesButton = document.querySelector('[aria-controls="resourcesSubMenu"]');
+      const isHidden = submenu.style.display === 'none' || submenu.style.display === '';
+      
+      if (isHidden) {
+        submenu.style.display = 'block';
+        setTimeout(() => submenu.classList.add('show'), 10);
+        resourcesButton.setAttribute('aria-expanded', 'true');
+        showNotification('ðŸ“š Homepage resources expanded! ðŸ ', 'success');
+      } else {
+        submenu.classList.remove('show');
+        setTimeout(() => submenu.style.display = 'none', 300);
+        resourcesButton.setAttribute('aria-expanded', 'false');
+      }
+    }
+    
+    // Enhanced keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const sidebar = document.getElementById('sidebar');
+        const burgerButton = document.querySelector('.burger-icon');
+        if (sidebar.classList.contains('open')) {
+          sidebar.classList.remove('open');
+          burgerButton.setAttribute('aria-expanded', 'false');
+          burgerButton.focus();
+        }
+        
+        closeNotification();
+      }
+    });
+    
+    // Enhanced focus trap for sidebar
+    document.addEventListener('keydown', function(e) {
+      const sidebar = document.getElementById('sidebar');
+      if (!sidebar.classList.contains('open')) return;
+      
+      if (e.key === 'Tab') {
+        const focusableElements = sidebar.querySelectorAll('a, button');
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    });
+
+    // Advanced smooth scrolling for all internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Page Visibility API for performance
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        // Pause animations when page is hidden
+        document.querySelectorAll('.particle').forEach(particle => {
+          particle.style.animationPlayState = 'paused';
+        });
+      } else {
+        // Resume animations when page is visible
+        document.querySelectorAll('.particle').forEach(particle => {
+          particle.style.animationPlayState = 'running';
+        });
+      }
+    });
+
+    // Advanced Error Handling
+    window.addEventListener('error', function(e) {
+      console.error('Error caught:', e.error);
+      showNotification('ðŸ”§ Homepage handling it smoothly! ðŸ ', 'error');
+    });
+
+    // Advanced Performance Monitoring
+    window.addEventListener('load', function() {
+      const loadTime = performance.now();
+      if (loadTime > 3000) {
+        showNotification('ðŸ  Homepage loaded! Welcome to Team Sheldon! ðŸš€', 'warning');
+      }
+    });
+  </script>
+</body>
+</html>
+
